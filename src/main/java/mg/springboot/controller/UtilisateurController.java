@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.Setter;
 import mg.springboot.entity.Utilisateur;
-import mg.springboot.exception.ValidationException;
 import mg.springboot.security.Response;
 import mg.springboot.security.Token;
 import mg.springboot.service.TokenService;
@@ -12,7 +11,6 @@ import mg.springboot.service.UtilisateurService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -49,16 +47,29 @@ public class UtilisateurController {
     }
 
     @PostMapping("/utilisateurs")
-    public Response<?> addUtilisateur(@RequestBody Utilisateur utilisateur) {
+    public Response<?> addUtilisateur(Utilisateur utilisateur) {
         try {
             return Response.send(HttpStatus.OK, "success", "Utilisateur ajouté", utilisateurService.save(utilisateur));
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             return Response.send(HttpStatus.OK, "error", e.getMessage(), utilisateur);
         }
     }
 
     @PutMapping("/utilisateurs")
-    public Response<?> modifyUtilisateur(@RequestBody Utilisateur utilisateur) {
-        return Response.send(HttpStatus.OK, "success", "Utilisateur modifié", utilisateurService.save(utilisateur));
+    public Response<?> modifyUtilisateur(Utilisateur utilisateur) {
+        try {
+            return Response.send(HttpStatus.OK, "success", "Utilisateur modifié", utilisateurService.modify(utilisateur));
+        } catch (Exception e) {
+            return Response.send(HttpStatus.OK, "error", e.getMessage(), utilisateur);
+        }
+    }
+
+    @DeleteMapping("/utilisateurs")
+    public Response<?> deleteUtilisateur(String id) {
+        try {
+            return Response.send(HttpStatus.OK, "success", "Utilisateur supprimé", utilisateurService.delete(id));
+        } catch (Exception e) {
+            return Response.send(HttpStatus.OK, "error", e.getMessage());
+        }
     }
 }
