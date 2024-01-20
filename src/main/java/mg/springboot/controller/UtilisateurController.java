@@ -1,6 +1,7 @@
 package mg.springboot.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import mg.springboot.entity.Utilisateur;
@@ -12,7 +13,6 @@ import mg.springboot.service.UtilisateurService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -48,17 +48,26 @@ public class UtilisateurController {
         return Response.send(HttpStatus.OK, "success", utilisateurService.findAll());
     }
 
-    @PostMapping("/utilisateurs")
-    public Response<?> addUtilisateur(@RequestBody Utilisateur utilisateur) {
-        try {
-            return Response.send(HttpStatus.OK, "success", "Utilisateur ajouté", utilisateurService.save(utilisateur));
-        } catch (ValidationException e) {
-            return Response.send(HttpStatus.OK, "error", e.getMessage(), utilisateur);
-        }
+    @GetMapping("/utilisateurs/{id}")
+    public Response<?> getUtilisateurs(@PathVariable String id) {
+        return Response.send(HttpStatus.OK, "success", utilisateurService.findById(id));
     }
 
-    @PutMapping("/utilisateurs")
-    public Response<?> modifyUtilisateur(@RequestBody Utilisateur utilisateur) {
-        return Response.send(HttpStatus.OK, "success", "Utilisateur modifié", utilisateurService.save(utilisateur));
+    @PostMapping("/utilisateurs")
+    public Response<?> addUtilisateur(@Valid Utilisateur utilisateur) {
+        return Response.send(HttpStatus.OK, "success", "L'utilisateur a été ajouté",
+                    utilisateurService.save(utilisateur));
+    }
+
+    @PutMapping("/utilisateurs/{id}")
+    public Response<?> modifyUtilisateur(@PathVariable String id, Utilisateur utilisateur) {
+        return Response.send(HttpStatus.OK, "success", "L'utilisateur a été modifié",
+                    utilisateurService.modify(id, utilisateur));
+    }
+
+    @DeleteMapping("/utilisateurs/{id}")
+    public Response<?> deleteUtilisateur(@PathVariable String id) {
+        return Response.send(HttpStatus.OK, "success", "L'utilisateur a été supprimé",
+                    utilisateurService.delete(id));
     }
 }
