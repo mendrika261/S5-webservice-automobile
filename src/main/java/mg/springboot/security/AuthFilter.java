@@ -36,6 +36,7 @@ public class AuthFilter implements Filter {
         // Cors Parameters
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization");
 
         String uri = httpRequest.getRequestURI();
         List<Page> pages = pageRepository.findAllByUrlStartingWith(uri.toLowerCase());
@@ -63,7 +64,7 @@ public class AuthFilter implements Filter {
                 }
             }
             httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response = Response.denied("Access denied");
+            response = Response.denied("Vous n'avez pas accès à cette page");
         }
 
         httpResponse.setContentType("application/json");
