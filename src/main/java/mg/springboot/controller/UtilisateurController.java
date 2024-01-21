@@ -40,6 +40,7 @@ public class UtilisateurController {
     public Response<?> deconnexion(HttpServletRequest request) {
         Token token = tokenService.getToken(request);
         tokenService.delete(token);
+        //Response.denied("");
         return Response.send(HttpStatus.OK, "success", "Déconnexion réussie", token);
     }
 
@@ -60,7 +61,7 @@ public class UtilisateurController {
     }
 
     @PutMapping("/utilisateurs/{id}")
-    public Response<?> modifyUtilisateur(@PathVariable String id, Utilisateur utilisateur) {
+    public Response<?> modifyUtilisateur(@PathVariable String id, @Valid Utilisateur utilisateur) {
         return Response.send(HttpStatus.OK, "success", "L'utilisateur a été modifié",
                     utilisateurService.modify(id, utilisateur));
     }
