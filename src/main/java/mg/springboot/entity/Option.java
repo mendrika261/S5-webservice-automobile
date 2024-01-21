@@ -9,20 +9,16 @@ import lombok.Setter;
 @Entity
 @Table(name = "option")
 public class Option {
-    @Column(name = "designation")
-    private String designation;
+  @Column(name = "designation") private String designation;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id", nullable = false)
+  private Integer id;
 
-    @Column(name = "type_valeur")
-    private String typeValeur;
+  @Column(name = "type_valeur") private String typeValeur;
 
-    @Column(name = "valeur")
-    private String valeur;
+  @Column(name = "valeur") private String valeur;
 
-//valeur? typeValeur?
-
+  // valeur? typeValeur?
 }

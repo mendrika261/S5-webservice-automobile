@@ -9,15 +9,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "couleur")
 public class Couleur {
-    @Column(name = "code_couleur")
-    private String codeCouleur;
+  @Column(name = "code_couleur") private String codeCouleur;
 
-    @Column(name = "nom")
-    private String nom;
+  @Column(name = "nom") private String nom;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id", nullable = false)
+  private Integer id;
 }

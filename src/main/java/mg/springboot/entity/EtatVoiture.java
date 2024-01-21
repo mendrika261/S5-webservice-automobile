@@ -9,12 +9,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "etat_voiture")
 public class EtatVoiture {
-    @Column(name = "designation")
-    private String designation;
+  @Column(name = "designation") private String designation;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id", nullable = false)
+  private Integer id;
 }

@@ -11,11 +11,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
-public class ResponseGlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @Override
-    protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return new ResponseEntity<>(Response.send(HttpStatus.NOT_FOUND, "error",
-                "La ressource demandée n'existe pas: " +
-                ex.getResourcePath()), HttpStatus.NOT_FOUND);
-    }
+public class ResponseGlobalExceptionHandler
+    extends ResponseEntityExceptionHandler {
+  @Override
+  protected ResponseEntity<Object>
+  handleNoResourceFoundException(NoResourceFoundException ex,
+                                 HttpHeaders headers, HttpStatusCode status,
+                                 WebRequest request) {
+    return new ResponseEntity<>(
+        Response.send(HttpStatus.NOT_FOUND, "error",
+                      "La ressource demandée n'existe pas: " +
+                          ex.getResourcePath()),
+        HttpStatus.NOT_FOUND);
+  }
 }

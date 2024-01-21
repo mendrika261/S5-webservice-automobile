@@ -9,12 +9,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "paiement")
 public class Paiement {
-    @Column(name = "designation",nullable = false)
-    private String designation;
+  @Column(name = "designation", nullable = false) private String designation;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id", nullable = false)
+  private Integer id;
 }
