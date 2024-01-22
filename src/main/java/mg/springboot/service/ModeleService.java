@@ -39,10 +39,6 @@ public class ModeleService {
         return modele.get();
     }
 
-//    public Modele findByMarqueAndNom()
-//    {
-//        return
-//    }
 
     public Modele modify(int id, Modele modele) {
         Modele modifModele = findById(id); // throw exception si l'utilisateur n'existe pas
