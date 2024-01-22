@@ -29,13 +29,17 @@ public class ModeleService {
     }
 
     public Modele save(Modele modele) {
-        return modeleRepository.save(modele);
+        try {
+            return modeleRepository.save(modele);
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Le modèle existe déjà");
+        }
     }
 
     public Modele findById(int id) {
         Optional<Modele> modele = modeleRepository.findById(id);
         if(modele.isEmpty())
-            throw new NotFoundException("Le modele n'existe pas");
+            throw new NotFoundException("Le modèle n'existe pas");
         return modele.get();
     }
 
