@@ -3,7 +3,6 @@ package mg.springboot.service;
 import lombok.Getter;
 import lombok.Setter;
 import mg.springboot.entity.Marque;
-import mg.springboot.entity.Utilisateur;
 import mg.springboot.exception.NotFoundException;
 import mg.springboot.exception.ValidationException;
 import mg.springboot.repository.MarqueRepository;
@@ -46,7 +45,7 @@ public class MarqueService {
     }
 
     public Marque modify(Integer id, Marque marque) {
-        Marque modifMarque = findById(id); // throw exception si l'utilisateur n'existe pas
+        Marque modifMarque = findById(id);
         marque.setId(modifMarque.getId());
         return save(marque);
     }
