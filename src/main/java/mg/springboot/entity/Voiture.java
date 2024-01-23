@@ -1,6 +1,7 @@
 package mg.springboot.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,5 +52,10 @@ public class Voiture {
 
     @Column(name = "mise_en_circulation")
     private LocalDate miseEnCirculation;
+
+    @ManyToOne
+    @JoinColumn(name = "couleur_id",nullable = false)
+    @NotNull(message = "La couleur doit être renseignée")
+    private Couleur couleur;
 
 }
