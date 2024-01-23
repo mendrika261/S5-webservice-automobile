@@ -17,7 +17,7 @@ public class EtatVoiture {
     private Integer id;
 
 
-    @Column(name = "designation", unique = true)
+    @Column(name = "designation", nullable = false, unique = true)
     @NotNull(message = "La designation doit être renseignée")
     @NotBlank(message = "La designation ne doit pas être vide")
     private String designation;
