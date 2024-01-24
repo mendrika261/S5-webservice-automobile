@@ -19,9 +19,6 @@ public class Fichier {
     @Column(name = "etat")
     private Integer  etat;
 
-    @Column(name = "date")
-    private LocalDate date;
-
     @Column(name = "nom_avec_chemin")
     private String nomAvecChemin;
 
