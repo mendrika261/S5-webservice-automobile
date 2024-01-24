@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -56,21 +58,24 @@ public class SortieVoiture {
     @ManyToOne
     @JoinColumn(name = "modele_id", nullable = false)
     @NotNull(message = "Le modèle doit être renseignée")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Modele modele;
 
     @ManyToOne
     @JoinColumn(name = "energie_id",nullable = false)
     @NotNull(message = "L'énergie doit être renseignée")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Energie energie;
 
     @ManyToOne
     @JoinColumn(name = "boite_vitesse_id",nullable = false)
     @NotNull(message = "La boite de vitesse doit être renseignée")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private BoiteVitesse boiteVitesse;
 
     @ManyToOne
     @JoinColumn(name = "pays_id",nullable = false)
     @NotNull(message = "Le pays doit être renseignée")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Pays pays;
-
 }

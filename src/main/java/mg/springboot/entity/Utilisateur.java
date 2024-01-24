@@ -47,4 +47,11 @@ public class Utilisateur {
     @NotNull(message = "Le level est obligatoire")
     @Min(value=0, message = "Le level doit être supérieur ou égal à 0")
     private int level;
+
+    @Transient
+    private String nomComplet;
+
+    public String getNomComplet() {
+        return this.prenom + " " + this.nom;
+    }
 }

@@ -31,4 +31,10 @@ public class Modele {
     @OnDelete(action=OnDeleteAction.CASCADE)
     private Marque marque;
 
+    @Transient
+    private String voiture;
+
+    public String getVoiture() {
+        return getMarque().getNom() + " " + getNom();
+    }
 }
