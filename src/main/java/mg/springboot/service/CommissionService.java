@@ -80,6 +80,15 @@ public class CommissionService {
         }).toList();
     }
 
+    public Commission getCommission(LocalDateTime localDateTime, double valeur) {
+        List<Commission> commissions = getCommissions(localDateTime);
+        for(Commission commission : commissions) {
+            if(valeur >= commission.getMinPrix() && valeur <= commission.getMaxPrix())
+                return commission;
+        }
+        return null;
+    }
+
     public Commission save(Commission commission)
     {
         if(commission.getMinPrix() > commission.getMaxPrix())
