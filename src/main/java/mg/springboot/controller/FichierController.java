@@ -3,17 +3,16 @@ package mg.springboot.controller;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
-import mg.springboot.entity.Couleur;
 import mg.springboot.entity.Fichier;
 import mg.springboot.security.Response;
 import mg.springboot.service.FichierService;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @Setter
 @Getter
 public class FichierController {
