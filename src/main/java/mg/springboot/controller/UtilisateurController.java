@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import mg.springboot.entity.Utilisateur;
-import mg.springboot.exception.ValidationException;
 import mg.springboot.security.Response;
 import mg.springboot.security.Token;
 import mg.springboot.service.TokenService;
