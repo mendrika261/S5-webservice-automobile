@@ -50,4 +50,76 @@ public class VoitureService {
         voitureRepository.delete(voiture);
         return voiture;
     }
+
+    public List<Object> getStatsBoiteVitesseVoiture() {
+        return voitureRepository.getStatsBoiteVitesseVoiture();
+    }
+
+    public List<Object> getStatsCouleurVoiture() {
+        return voitureRepository.getStatsCouleurVoiture();
+    }
+
+    public List<Object> getStatsEnergieVoiture() {
+        return voitureRepository.getStatsEnergieVoiture();
+    }
+
+    public List<Object> getStatsEtatVoiture() {
+        return voitureRepository.getStatsEtatVoiture();
+    }
+
+    public List<Object> getStatsPaysVoiture() {
+        return voitureRepository.getStatsPaysVoiture();
+    }
+
+    public List<Object> getStatsAnneeVoiture() {
+        return voitureRepository.getStatsAnneeVoiture();
+    }
+
+    public List<Object> getStatsModeleVoiture() {
+        return voitureRepository.getStatsModeleVoiture();
+    }
+
+    public List<Object> getStatsMarqueVoiture() {
+        return voitureRepository.getStatsMarqueVoiture();
+    }
+
+    public List<Object> getStatsNbAnnonce() {
+        return voitureRepository.getStatsNbAnnonce();
+    }
+
+    public List<Object> getChiffreAffaire12DernierMois() {
+        return voitureRepository.getChiffreAffaire12DernierMois();
+    }
+
+    public Object getStatsUtilisateurEnLigne() {
+        return voitureRepository.getStatsUtilisateurEnLigne();
+    }
+
+    public Object getStatsAnnonceEnAttente() {
+        return voitureRepository.getStatsAnnonceEnAttente();
+    }
+
+    public Object getStatsNbVente() {
+        return voitureRepository.getStatsNbVente();
+    }
+
+    public Object getStatsValidationAnnonce() {
+        return voitureRepository.getStatsValidationAnnonce();
+    }
+
+    public Object getNbUtilisateur() {
+        return voitureRepository.getNbUtilisateur();
+    }
+
+    public Object getNbAnnonce() {
+        return voitureRepository.getNbAnnonce();
+    }
+
+    public Object getNbVoiture() {
+        return voitureRepository.getNbVoiture();
+    }
+
+    public Object getNbVente() {
+        return voitureRepository.getNbVente();
+    }
 }

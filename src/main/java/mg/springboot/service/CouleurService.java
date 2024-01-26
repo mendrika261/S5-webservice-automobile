@@ -38,7 +38,7 @@ public class CouleurService {
 
 
     public Couleur modify(int id, Couleur couleur) {
-        Couleur modifCouleur = findById(id); // throw exception si le pays n'existe pas
+        Couleur modifCouleur = findById(id);
         modifCouleur.setId(modifCouleur.getId());
         return save(couleur);
     }

@@ -19,7 +19,7 @@ public class Couleur {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "code_couleur",nullable = false)
+    @Column(name = "code_couleur",nullable = false, unique = true)
     @NotNull(message = "La couleur est obligatoire")
     @NotBlank(message = "La couleur ne peut pas être vide")
     @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "La couleur doit être au format hexadécimal")
