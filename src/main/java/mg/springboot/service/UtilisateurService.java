@@ -42,7 +42,7 @@ public class UtilisateurService {
     }
 
     public Utilisateur modify(String id, Utilisateur utilisateur) {
-        Utilisateur modifUtilisateur = findById(id); // throw exception si l'utilisateur n'existe pas
+        Utilisateur modifUtilisateur = findById(id);
         utilisateur.setId(modifUtilisateur.getId());
         return save(utilisateur);
     }

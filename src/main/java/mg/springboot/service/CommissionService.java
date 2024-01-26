@@ -8,10 +8,7 @@ import mg.springboot.repository.CommissionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Getter
@@ -48,6 +45,7 @@ public class CommissionService {
 
     Set<Commission> removeDuplicated(List<Commission> commissions) {
         Set<Commission> resultats = new HashSet<Commission>();
+        int id = 0;
         for(Commission commission : commissions) {
             boolean exist = false;
             for(Commission commission1 : resultats) {
@@ -56,8 +54,11 @@ public class CommissionService {
                     break;
                 }
             }
-            if(!exist)
+            if(!exist) {
+                commission.setId(id);
                 resultats.add(commission);
+                id++;
+            }
         }
         return resultats;
     }

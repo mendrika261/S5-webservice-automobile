@@ -24,8 +24,10 @@ public class CommissionController {
     }
 
     @GetMapping("/commissions")
-    public Response<?> getCommissions()
+    public Response<?> getCommissions(@RequestParam(required = false) LocalDateTime dateTime)
     {
+        if(dateTime != null)
+            return Response.send(HttpStatus.OK, "success", commissionService.getCommissions(dateTime));
         return Response.send(HttpStatus.OK, "success", commissionService.getCommissions(LocalDateTime.now()));
     }
 

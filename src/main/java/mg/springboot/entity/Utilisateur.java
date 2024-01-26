@@ -1,5 +1,6 @@
 package mg.springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class Utilisateur {
     @Pattern(regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\\.[a-z]{2,4}$", message = "L'email est invalide")
     private String email;
 
+    @JsonIgnore
     @Column(name = "mot_de_passe", nullable = false)
     @NotNull(message = "Le mot de passe est obligatoire")
     @NotBlank(message = "Le mot de passe ne peut pas être vide")
