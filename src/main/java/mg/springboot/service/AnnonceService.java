@@ -81,4 +81,10 @@ public class AnnonceService {
         annonceRepository.delete(annonce);
         return annonce;
     }
+
+    public List<Annonce> getActivesAndValides()
+    {
+        List<Annonce> annonces=annonceRepository.findByEtat(Annonce.ETAT_VALIDE);
+        return annonces;
+    }
 }
