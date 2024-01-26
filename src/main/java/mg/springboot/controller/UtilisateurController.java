@@ -29,8 +29,6 @@ public class UtilisateurController {
 
     @PostMapping("/connexion")
     public Response<?> connexion(String email, String motDePasse) {
-        System.out.println("tato");
-        System.out.println("email"+email+" mdp "+motDePasse );
         Optional<Utilisateur> utilisateur = utilisateurService.findByEmailAndMotDePasse(email, motDePasse);
         if (utilisateur.isPresent())
             return Response.send(HttpStatus.OK, "success","connexion reussie", tokenService.createFor(utilisateur.get()));
@@ -41,7 +39,6 @@ public class UtilisateurController {
     public Response<?> deconnexion(HttpServletRequest request) {
         Token token = tokenService.getToken(request);
         tokenService.delete(token);
-        //Response.denied("");
         return Response.send(HttpStatus.OK, "success", "Déconnexion réussie", token);
     }
 
