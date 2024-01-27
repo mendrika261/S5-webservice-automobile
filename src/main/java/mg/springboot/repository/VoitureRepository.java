@@ -77,10 +77,11 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
             "ORDER BY d.date", nativeQuery = true)
     List<Object> getChiffreAffaire12DernierMois();
 
-    @Query(value = "select count(*) filter (where last_activity + duration * interval '1 second' > now()) active, count(distinct u.id) total, " +
-            "       round(cast(count(*) filter (where last_activity + duration * interval '1 second' > now()) as decimal) / COALESCE(NULLIF(count(u.id),0),1) * 100, 2) pourcentage " +
+    @Query(value = "select count(distinct t.utilisateur_id) filter (where last_activity + duration * interval '1 second' > now()) active," +
+            "count(distinct u.id) total, " +
+            "       round(cast(count(*) filter (where last_activity + duration * interval '1 second' > now()) as decimal) / COALESCE(NULLIF(count(distinct u.id),0),1) * 100, 2) pourcentage " +
             "from token t " +
-            "right join utilisateur u on u.id = t.utilisateur_id", nativeQuery = true)
+            "right join utilisateur u on u.id = t.utilisateur_id where deleted is false", nativeQuery = true)
     Object getStatsUtilisateurEnLigne();
 
     @Query(value = "select count(*) filter ( where date_validation is null ) en_attente, " +
