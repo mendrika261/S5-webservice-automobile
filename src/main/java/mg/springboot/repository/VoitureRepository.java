@@ -84,7 +84,7 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
     Object getStatsUtilisateurEnLigne();
 
     @Query(value = "select count(*) filter ( where date_validation is null ) en_attente, " +
-            "    count(*) total, " +
+            "    count(*) filter ( where date_fin is null ) total, " +
             "    round(cast(count(*) filter ( where date_validation is null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100, 2) pourcentage " +
             "from annonce", nativeQuery = true)
     Object getStatsAnnonceEnAttente();
@@ -93,7 +93,7 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
             "       count(*) total, " +
             "    round(cast(count(*) filter ( where v.id is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100, 2) pourcentage " +
             "from annonce " +
-            "left join vente v on annonce.id = v.annonce_id where date_validation is null", nativeQuery = true)
+            "left join vente v on annonce.id = v.annonce_id", nativeQuery = true)
     Object getStatsNbVente();
 
     @Query(value = "SELECT count(*) filter ( where etat >= "+ Annonce.ETAT_VALIDE +" ) valide, " +
