@@ -1,6 +1,7 @@
 package mg.springboot.service;
 
 import mg.springboot.entity.Annonce;
+import mg.springboot.entity.HistoriqueEtatAnnonce;
 import mg.springboot.entity.Utilisateur;
 import mg.springboot.exception.ValidationException;
 import mg.springboot.repository.AnnonceRepository;
@@ -15,10 +16,12 @@ import java.util.Optional;
 public class AnnonceService {
     private final AnnonceRepository annonceRepository;
     private final CommissionService commissionService;
+    private final HistoriqueEtatAnnonceService historiqueEtatAnnonceService;
 
-    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService) {
+    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService, HistoriqueEtatAnnonceService historiqueEtatAnnonceService) {
         this.annonceRepository = annonceRepository;
         this.commissionService = commissionService;
+        this.historiqueEtatAnnonceService = historiqueEtatAnnonceService;
     }
 
     public List<Annonce> findAll() {
@@ -42,6 +45,15 @@ public class AnnonceService {
         annonce.setEtat(Annonce.ETAT_VALIDE);
         annonce.setValidateur(validateur);
         annonce.setDateValidation(LocalDateTime.now());
+
+
+        //historiser
+        HistoriqueEtatAnnonce historiqueEtatAnnonce1=new HistoriqueEtatAnnonce();
+        historiqueEtatAnnonce1.setAnnonce(annonce);
+        historiqueEtatAnnonce1.setData_action(LocalDateTime.now());
+        historiqueEtatAnnonce1.setEtat(Annonce.ETAT_VALIDE);
+        historiqueEtatAnnonce1.setUtilisateur_origine(validateur);
+        historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
         return save(annonce);
     }
 
@@ -50,6 +62,13 @@ public class AnnonceService {
         annonce.setEtat(Annonce.ETAT_REFUSE);
         annonce.setValidateur(validateur);
         annonce.setDateValidation(LocalDateTime.now());
+
+        HistoriqueEtatAnnonce historiqueEtatAnnonce1=new HistoriqueEtatAnnonce();
+        historiqueEtatAnnonce1.setAnnonce(annonce);
+        historiqueEtatAnnonce1.setData_action(LocalDateTime.now());
+        historiqueEtatAnnonce1.setEtat(Annonce.ETAT_REFUSE);
+        historiqueEtatAnnonce1.setUtilisateur_origine(validateur);
+        historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
         return save(annonce);
     }
 
@@ -64,10 +83,38 @@ public class AnnonceService {
 
     public Annonce save(Annonce annonce) {
         try {
-            return annonceRepository.save(annonce);
+
+            Annonce annonce1= annonceRepository.save(annonce);
+            if(annonce.getEtat()==Annonce.ETAT_NON_VALIDE)
+            {
+                HistoriqueEtatAnnonce historiqueEtatAnnonce1=new HistoriqueEtatAnnonce();
+                historiqueEtatAnnonce1.setAnnonce(annonce1);
+                historiqueEtatAnnonce1.setData_action(LocalDateTime.now());
+                historiqueEtatAnnonce1.setEtat(annonce.getEtat());
+                historiqueEtatAnnonce1.setUtilisateur_origine(annonce1.getVoiture().getUtilisateur());
+                historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
+            }
+            return  annonce1;
         } catch (DataIntegrityViolationException e) {
             throw new ValidationException("Il y a déjà une annonce pour cette voiture");
         }
+    }
+
+
+    public Annonce vendue(int id)
+    {
+        Annonce annonce = findById(id);
+        annonce.setEtat(Annonce.ETAT_VENDUE);
+
+
+        //historiser
+        HistoriqueEtatAnnonce historiqueEtatAnnonce1=new HistoriqueEtatAnnonce();
+        historiqueEtatAnnonce1.setAnnonce(annonce);
+        historiqueEtatAnnonce1.setData_action(LocalDateTime.now());
+        historiqueEtatAnnonce1.setEtat(Annonce.ETAT_VENDUE);
+        historiqueEtatAnnonce1.setUtilisateur_origine(annonce.getVoiture().getUtilisateur());
+        historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
+        return save(annonce);
     }
 
     public Annonce modify(Integer id, Annonce annonce) {
@@ -79,12 +126,27 @@ public class AnnonceService {
     public Annonce delete(Integer id) {
         Annonce annonce = findById(id);
         annonceRepository.delete(annonce);
+
         return annonce;
     }
 
-    public List<Annonce> getActivesAndValides()
+    public List<Annonce> findAllValides()
     {
-        List<Annonce> annonces=annonceRepository.findByEtat(Annonce.ETAT_VALIDE);
-        return annonces;
+        return annonceRepository.findAllByEtat(Annonce.ETAT_VALIDE).stream()
+                .peek(annonce -> annonce
+                        .setCommission(commissionService
+                                .getCommission(annonce.getDate(), annonce.getPrix())))
+                .toList();
     }
+
+    public List<Annonce> findAllValides(Utilisateur utilisateur)
+    {
+        return annonceRepository.findByEtatAndVoiture_UtilisateurNot(Annonce.ETAT_VALIDE,utilisateur).stream()
+                .peek(annonce -> annonce
+                        .setCommission(commissionService
+                                .getCommission(annonce.getDate(), annonce.getPrix())))
+                .toList();
+    }
+
+
 }

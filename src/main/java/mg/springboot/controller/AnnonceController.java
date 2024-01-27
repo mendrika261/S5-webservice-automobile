@@ -10,6 +10,8 @@ import mg.springboot.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class AnnonceController {
     private final AnnonceService annonceService;
@@ -22,12 +24,29 @@ public class AnnonceController {
 
     @GetMapping("/annonces")
     public Response<?> findAll() {
+
         return Response.send(HttpStatus.OK, "success", annonceService.findAll());
     }
 
     @GetMapping("/annonces/en-attente")
     public Response<?> findAllEnAttente() {
         return Response.send(HttpStatus.OK, "success", annonceService.findAllEnAttente());
+    }
+
+    @GetMapping("/annonces/valide")
+    public Response<?> findAllValide(HttpServletRequest request) {
+        List<Annonce> annonces=null;
+        if(tokenService.getToken(request)!=null)
+        {
+            Token token=tokenService.getToken(request);
+            annonces=annonceService.findAllValides(token.getUtilisateur());
+
+        }
+        else
+        {
+            annonces=annonceService.findAllValides();
+        }
+        return Response.send(HttpStatus.OK, "success", annonces);
     }
 
     @GetMapping("/annonces/{id}")

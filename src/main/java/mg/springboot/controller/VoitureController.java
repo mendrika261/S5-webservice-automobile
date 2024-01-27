@@ -1,8 +1,11 @@
 package mg.springboot.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import mg.springboot.entity.Voiture;
 import mg.springboot.security.Response;
+import mg.springboot.security.Token;
+import mg.springboot.service.TokenService;
 import mg.springboot.service.VoitureService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class VoitureController {
     private final VoitureService voitureService;
+    private final TokenService tokenService;
 
-    public VoitureController(VoitureService voitureService) {
+    public VoitureController(VoitureService voitureService, TokenService tokenService) {
         this.voitureService = voitureService;
+        this.tokenService = tokenService;
     }
 
     @GetMapping("/voitures")
@@ -33,10 +38,10 @@ public class VoitureController {
 
     @PostMapping("/voitures")
     public Response<?> addVoiture(@Valid Voiture voiture) {
+        System.out.println("tato "+voiture.getMiseEnCirculation());
         return Response.send(HttpStatus.OK, "success", "La voiture a été ajoutée",
                 voitureService.save(voiture));
     }
-
     @DeleteMapping("/voitures/{id}")
     public Response<?> deleteVoiture(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", "La voiture a été supprimée",
