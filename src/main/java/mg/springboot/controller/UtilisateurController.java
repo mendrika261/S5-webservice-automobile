@@ -69,4 +69,23 @@ public class UtilisateurController {
         return Response.send(HttpStatus.OK, "success", "L'utilisateur a été supprimé",
                     utilisateurService.delete(id));
     }
+
+    @DeleteMapping("/utilisateurs/{id}/photo/{photoId}")
+    public Response<?> deletePhoto(@PathVariable String id, @PathVariable Integer photoId) {
+        return Response.send(HttpStatus.OK, "success", "La photo a été supprimée",
+                    utilisateurService.deletePhoto(id, photoId));
+    }
+
+    @PutMapping("/utilisateurs/{id}/photo/{photoId}")
+    public Response<?> modifyPhoto(@PathVariable String id, @PathVariable Integer photoId) {
+        return Response.send(HttpStatus.OK, "success", "La photo a été modifiée",
+                    utilisateurService.modifyPhoto(id, photoId));
+    }
+
+    @PutMapping("/utilisateurs/{id}/mot-de-passe")
+    public Response<?> modifyMotDePasse(@PathVariable String id, String motDePasse, String nouveauMotDePasse) {
+        return Response.send(HttpStatus.OK, "success", "Le mot de passe a été modifié",
+                    utilisateurService.modifyMotDePasse(id, motDePasse, nouveauMotDePasse));
+    }
+
 }
