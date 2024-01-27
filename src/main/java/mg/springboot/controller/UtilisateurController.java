@@ -59,7 +59,7 @@ public class UtilisateurController {
     }
 
     @PutMapping("/utilisateurs/{id}")
-    public Response<?> modifyUtilisateur(@PathVariable String id, @Valid Utilisateur utilisateur) {
+    public Response<?> modifyUtilisateur(@PathVariable String id, Utilisateur utilisateur) {
         return Response.send(HttpStatus.OK, "success", "L'utilisateur a été modifié",
                     utilisateurService.modify(id, utilisateur));
     }

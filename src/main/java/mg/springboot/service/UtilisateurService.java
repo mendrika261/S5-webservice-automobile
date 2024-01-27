@@ -1,5 +1,8 @@
 package mg.springboot.service;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import mg.springboot.entity.Utilisateur;
 import mg.springboot.exception.NotFoundException;
 import mg.springboot.exception.ValidationException;
@@ -9,13 +12,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
+    private final Validator validator;
 
-    public UtilisateurService(UtilisateurRepository utilisateurRepository) {
+    public UtilisateurService(UtilisateurRepository utilisateurRepository, Validator validator) {
         this.utilisateurRepository = utilisateurRepository;
+        this.validator = validator;
     }
 
     public Optional<Utilisateur> findByEmailAndMotDePasse(String login, String motDePasse) {
@@ -44,12 +50,28 @@ public class UtilisateurService {
     public Utilisateur modify(String id, Utilisateur utilisateur) {
         Utilisateur modifUtilisateur = findById(id);
         utilisateur.setId(modifUtilisateur.getId());
+
+        if(utilisateur.getMotDePasse() == null)
+            utilisateur.setMotDePasse(modifUtilisateur.getMotDePasse());
+
+        if(utilisateur.getPhoto() == null)
+            utilisateur.setPhoto(modifUtilisateur.getPhoto());
+
+        Set<ConstraintViolation<Utilisateur>> violations = validator.validate(utilisateur);
+        if (!violations.isEmpty())
+            throw new ConstraintViolationException(violations);
+
         return save(utilisateur);
     }
 
     public Utilisateur delete(String id) {
         Utilisateur utilisateur = findById(id);
-        utilisateurRepository.delete(utilisateur);
+        try {
+            utilisateurRepository.delete(utilisateur);
+            System.out.println(utilisateur.getEmail());
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Vous ne pouvez pas supprimer l'utilisateur connecté");
+        }
         return utilisateur;
     }
 }

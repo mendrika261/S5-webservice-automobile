@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,6 +26,6 @@ public class Fichier {
     private String type;
 
     @Column(name = "date_creation")
-    private LocalDate dateCreation = LocalDate.now();
+    private LocalDateTime dateCreation = LocalDateTime.now();
 
 }

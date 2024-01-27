@@ -1,5 +1,6 @@
 package mg.springboot.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import mg.springboot.security.Response;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,13 @@ public class GlobalExceptionHandler {
                 .getFieldErrors())
             errors.put(error.getField(), error.getDefaultMessage());
         return Response.send(HttpStatus.BAD_REQUEST, "error", errors.values().iterator().next(), errors);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Response<?> handleConstraintViolationExceptions(
+            ConstraintViolationException ex) {
+        return Response.send(HttpStatus.BAD_REQUEST, "error", ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
