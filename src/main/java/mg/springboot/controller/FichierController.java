@@ -7,10 +7,7 @@ import mg.springboot.entity.Fichier;
 import mg.springboot.security.Response;
 import mg.springboot.service.FichierService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Setter
@@ -23,7 +20,7 @@ public class FichierController {
     }
 
     @GetMapping("/fichiers")
-    public Response<?> getfichiers()   {
+    public Response<?> getfichiers() {
         return Response.send(HttpStatus.OK, "success", fichierService.findAll());
     }
 
@@ -36,5 +33,10 @@ public class FichierController {
     public Response<?> addfichiers(@Valid Fichier fichier) {
         return Response.send(HttpStatus.OK, "success", "Le fichier a été ajouté",
                 fichierService.save(fichier));
+    }
+
+    @DeleteMapping("/fichiers/{id}")
+    public Response<?> deletefichier(@PathVariable int id) {
+        return Response.send(HttpStatus.OK, "success", "Le fichier a été supprimé", fichierService.delete(id));
     }
 }

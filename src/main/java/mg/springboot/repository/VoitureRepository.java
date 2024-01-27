@@ -78,47 +78,47 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
     List<Object> getChiffreAffaire12DernierMois();
 
     @Query(value = "select count(*) filter (where last_activity + duration * interval '1 second' > now()) active, count(u.id) total, " +
-            "       cast(count(*) filter (where last_activity + duration * interval '1 second' > now()) as decimal) / COALESCE(NULLIF(count(u.id),0),1) * 100 pourcentage " +
+            "       round(cast(count(*) filter (where last_activity + duration * interval '1 second' > now()) as decimal) / COALESCE(NULLIF(count(u.id),0),1) * 100, 2) pourcentage " +
             "from token t " +
             "right join utilisateur u on u.id = t.utilisateur_id", nativeQuery = true)
     Object getStatsUtilisateurEnLigne();
 
     @Query(value = "select count(*) filter ( where date_validation is null ) en_attente, " +
             "    count(*) total, " +
-            "    cast(count(*) filter ( where date_validation is null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100 pourcentage " +
+            "    round(cast(count(*) filter ( where date_validation is null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100, 2) pourcentage " +
             "from annonce", nativeQuery = true)
     Object getStatsAnnonceEnAttente();
 
     @Query(value = "SELECT count(*) filter ( where v.id is not null ) vendu, " +
             "       count(*) total, " +
-            "    cast(count(*) filter ( where v.id is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100 pourcentage " +
+            "    round(cast(count(*) filter ( where v.id is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100, 2) pourcentage " +
             "from annonce " +
             "left join vente v on annonce.id = v.annonce_id where date_validation is null", nativeQuery = true)
     Object getStatsNbVente();
 
     @Query(value = "SELECT count(*) filter ( where etat >= "+ Annonce.ETAT_VALIDE +" ) valide, " +
             "         count(*) total, " +
-            "     cast(count(*) filter ( where etat >= " + Annonce.ETAT_VALIDE + " ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100 pourcentage " +
+            "     round(cast(count(*) filter ( where etat >= " + Annonce.ETAT_VALIDE + " ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100,2) pourcentage " +
             "from annonce " +
             "where date_validation is not null", nativeQuery = true)
     Object getStatsValidationAnnonce();
 
     @Query(value = "select count(*) filter ( where v.id is not null ) vendeur, " +
             "        count(*) total, " +
-            "     cast(count(*) filter ( where v.id is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100 pourcentage " +
+            "     round(cast(count(*) filter ( where v.id is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100,2) pourcentage " +
             "from utilisateur " +
             "left join voiture v on utilisateur.id = v.utilisateur_id", nativeQuery = true)
     Object getNbUtilisateur();
 
     @Query(value = "select count(*) filter ( where premiere_main = true ) as premiere_main, " +
             "        count(*) total, " +
-            "     cast(count(*) filter ( where premiere_main = true ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100 pourcentage " +
+            "     round(cast(count(*) filter ( where premiere_main = true ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100,2) pourcentage " +
             "from voiture", nativeQuery = true)
     Object getNbVoiture();
 
     @Query(value = "select count(*) filter ( where date_fin is null and date_validation is not null ) as en_cours, " +
             "        count(*) total, " +
-            "     cast(count(*) filter ( where date_fin is null and date_validation is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100 pourcentage " +
+            "     round(cast(count(*) filter ( where date_fin is null and date_validation is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100,2) pourcentage " +
             "from annonce", nativeQuery = true)
     Object getNbAnnonce();
 

@@ -36,4 +36,10 @@ public class FichierService {
         return fichier.get();
     }
 
+    public Fichier delete(int id) {
+        Fichier fichier = findById(id);
+        fichierRepository.delete(fichier);
+        return fichier;
+    }
+
 }

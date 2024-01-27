@@ -20,7 +20,7 @@ public class Fichier {
     private Integer  etat;
 
     @Column(name = "nom_avec_chemin")
-    private String nomAvecChemin;
+    private String lien;
 
     @Column(name = "type")
     private String type;
