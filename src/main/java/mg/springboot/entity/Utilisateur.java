@@ -50,6 +50,10 @@ public class Utilisateur {
     @Min(value=0, message = "Le level doit être supérieur ou égal à 0")
     private int level;
 
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "fichier_id", nullable = true)
+    private Fichier photo;
+
     @Transient
     private String nomComplet;
 

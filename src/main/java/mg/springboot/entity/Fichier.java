@@ -17,12 +17,15 @@ public class Fichier {
     private Integer id;
 
     @Column(name = "etat")
-    private Integer  etat;
+    private Integer  etat = 0;
 
     @Column(name = "nom_avec_chemin")
     private String lien;
 
     @Column(name = "type")
     private String type;
+
+    @Column(name = "date_creation")
+    private LocalDate dateCreation = LocalDate.now();
 
 }
