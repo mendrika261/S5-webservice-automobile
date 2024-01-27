@@ -31,7 +31,7 @@ public class UtilisateurController {
     public Response<?> connexion(String email, String motDePasse) {
         Optional<Utilisateur> utilisateur = utilisateurService.findByEmailAndMotDePasse(email, motDePasse);
         if (utilisateur.isPresent())
-            return Response.send(HttpStatus.OK, "success","connexion reussie", tokenService.createFor(utilisateur.get()));
+            return Response.send(HttpStatus.OK, "success","Connexion réussie", tokenService.createFor(utilisateur.get()));
         return Response.send(HttpStatus.OK, "error", "Login ou mot de passe incorrect");
     }
 

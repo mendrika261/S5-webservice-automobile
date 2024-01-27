@@ -25,6 +25,10 @@ public class UtilisateurService {
     }
 
     public Optional<Utilisateur> findByEmailAndMotDePasse(String login, String motDePasse) {
+        if(login == null || login.isEmpty())
+            throw new ValidationException("L'email doit être renseigné");
+        if(motDePasse == null || motDePasse.isEmpty())
+            throw new ValidationException("Le mot de passe doit être renseigné");
         return utilisateurRepository.findByEmailAndMotDePasse(login, motDePasse);
     }
 
