@@ -45,10 +45,10 @@ public class Utilisateur {
     @Size(min = 6, message = "Le mot de passe doit contenir au moins 6 caractères")
     private String motDePasse;
 
-    @Column(name = "level")
+    @Column(name = "level", nullable = false)
     @NotNull(message = "Le level est obligatoire")
     @Min(value=0, message = "Le level doit être supérieur ou égal à 0")
-    private int level;
+    private int level = LEVEL_USER;
 
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "fichier_id", nullable = true)
@@ -56,6 +56,10 @@ public class Utilisateur {
 
     @Transient
     private String nomComplet;
+
+    @Transient
+    public static final int LEVEL_USER = 10;
+    public static final int LEVEL_ADMIN = 20;
 
     public String getNomComplet() {
         return this.prenom + " " + this.nom;

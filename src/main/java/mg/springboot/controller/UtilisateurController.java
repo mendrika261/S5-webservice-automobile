@@ -35,6 +35,13 @@ public class UtilisateurController {
         return Response.send(HttpStatus.OK, "error", "Login ou mot de passe incorrect");
     }
 
+    @PostMapping("/inscription")
+    public Response<?> inscription(@Valid Utilisateur utilisateur) {
+        if(utilisateur.getLevel() != Utilisateur.LEVEL_USER)
+            return Response.send(HttpStatus.OK, "error", "Vous ne pouvez s'incrire que comme utilisateur");
+        return Response.send(HttpStatus.OK, "success", "Inscription réussie", utilisateurService.save(utilisateur));
+    }
+
     @DeleteMapping("/deconnexion")
     public Response<?> deconnexion(HttpServletRequest request) {
         Token token = tokenService.getToken(request);
@@ -87,5 +94,4 @@ public class UtilisateurController {
         return Response.send(HttpStatus.OK, "success", "Le mot de passe a été modifié",
                     utilisateurService.modifyMotDePasse(id, motDePasse, nouveauMotDePasse));
     }
-
 }
