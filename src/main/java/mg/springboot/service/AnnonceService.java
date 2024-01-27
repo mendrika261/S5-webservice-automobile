@@ -85,16 +85,36 @@ public class AnnonceService {
         try {
 
             Annonce annonce1= annonceRepository.save(annonce);
-            HistoriqueEtatAnnonce historiqueEtatAnnonce1=new HistoriqueEtatAnnonce();
-            historiqueEtatAnnonce1.setAnnonce(annonce1);
-            historiqueEtatAnnonce1.setData_action(LocalDateTime.now());
-            historiqueEtatAnnonce1.setEtat(Annonce.ETAT_NON_VALIDE);
-            historiqueEtatAnnonce1.setUtilisateur_origine(annonce1.getVoiture().getUtilisateur());
-            historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
+            if(annonce.getEtat()==Annonce.ETAT_NON_VALIDE)
+            {
+                HistoriqueEtatAnnonce historiqueEtatAnnonce1=new HistoriqueEtatAnnonce();
+                historiqueEtatAnnonce1.setAnnonce(annonce1);
+                historiqueEtatAnnonce1.setData_action(LocalDateTime.now());
+                historiqueEtatAnnonce1.setEtat(annonce.getEtat());
+                historiqueEtatAnnonce1.setUtilisateur_origine(annonce1.getVoiture().getUtilisateur());
+                historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
+            }
             return  annonce1;
         } catch (DataIntegrityViolationException e) {
             throw new ValidationException("Il y a déjà une annonce pour cette voiture");
         }
+    }
+
+
+    public Annonce vendue(int id)
+    {
+        Annonce annonce = findById(id);
+        annonce.setEtat(Annonce.ETAT_VENDUE);
+
+
+        //historiser
+        HistoriqueEtatAnnonce historiqueEtatAnnonce1=new HistoriqueEtatAnnonce();
+        historiqueEtatAnnonce1.setAnnonce(annonce);
+        historiqueEtatAnnonce1.setData_action(LocalDateTime.now());
+        historiqueEtatAnnonce1.setEtat(Annonce.ETAT_VENDUE);
+        historiqueEtatAnnonce1.setUtilisateur_origine(annonce.getVoiture().getUtilisateur());
+        historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
+        return save(annonce);
     }
 
     public Annonce modify(Integer id, Annonce annonce) {

@@ -59,7 +59,7 @@ public class FavoriController {
             return Response.send(HttpStatus.OK, "error", e.getMessage());
 
         }
-        return Response.send(HttpStatus.OK, "success",favori);
+        return Response.send(HttpStatus.OK, "success","Annonce ajoutee a vos favoris",favori);
     }
 
 
@@ -81,6 +81,6 @@ public class FavoriController {
 
         }
 
-        return Response.send(HttpStatus.OK, "success", favori);
+        return Response.send(HttpStatus.OK, "success","Annonce retiree de vos favoris", favori);
     }
 }

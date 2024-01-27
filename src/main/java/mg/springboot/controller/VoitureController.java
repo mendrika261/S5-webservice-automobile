@@ -38,6 +38,7 @@ public class VoitureController {
 
     @PostMapping("/voitures")
     public Response<?> addVoiture(@Valid Voiture voiture) {
+        System.out.println("tato "+voiture.getMiseEnCirculation());
         return Response.send(HttpStatus.OK, "success", "La voiture a été ajoutée",
                 voitureService.save(voiture));
     }

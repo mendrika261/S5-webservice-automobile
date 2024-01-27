@@ -61,6 +61,11 @@ public class Annonce {
     @Transient
     public static final int ETAT_REFUSE = -10;
 
+    @Transient
+    public static final int ETAT_VENDUE = 30;
+
+
+
     public double getValeurCommission() {
         if(commission == null)
             return 0;
@@ -73,6 +78,7 @@ public class Annonce {
             case ETAT_VALIDE -> "Validée";
             case ETAT_EXPIRE -> "Expirée";
             case ETAT_REFUSE -> "Refusée";
+            case ETAT_VENDUE -> "Vendue";
             default -> "Inconnu";
         };
     }

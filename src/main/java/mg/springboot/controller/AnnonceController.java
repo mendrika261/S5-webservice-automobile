@@ -24,6 +24,7 @@ public class AnnonceController {
 
     @GetMapping("/annonces")
     public Response<?> findAll() {
+
         return Response.send(HttpStatus.OK, "success", annonceService.findAll());
     }
 

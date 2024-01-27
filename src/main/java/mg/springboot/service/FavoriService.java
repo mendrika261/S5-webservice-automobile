@@ -56,7 +56,7 @@ public class FavoriService {
         }
         favori.setDate_action(LocalDateTime.now());
         favori.setEtat(Favori.ETAT_VALIDE);
-        return favori;
+        return favoriRepository.save(favori);
     }
 
 
@@ -71,13 +71,13 @@ public class FavoriService {
             throw new RuntimeException("l'annonce n'existe pas");
         }
         Favori favori=findByUtilisateurAndAnnonce(utilisateur,annonce);
-        if(favori==null)
+        if(favori==null || favori.getEtat()==Favori.ETAT_NON_VALIDE)
         {
-            throw new RuntimeException("le favori n'existe pas");
+            throw new RuntimeException("L'annonce ne fait pas partie de vos favoris");
         }
         favori.setDate_action(LocalDateTime.now());
         favori.setEtat(Favori.ETAT_NON_VALIDE);
-        return favori;
+        return favoriRepository.save(favori);
     }
 
     public Favori findById(Integer id) {
