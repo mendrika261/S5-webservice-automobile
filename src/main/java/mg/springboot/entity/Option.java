@@ -30,6 +30,5 @@ public class Option {
     @Column(name = "valeurs")
     @NotNull(message = "Il faut au moins une valeur")
     @NotBlank(message = "Il faut au moins une valeur")
-    @Pattern(regexp = "^([A-Za-z0-9]+,)*[A-Za-z0-9]+$", message = "Les valeurs doivent être séparées par des virgules")
-    private String valeurs;
+    @Pattern(regexp = "^[a-zA-Z0-9\\sàâäéèêëïîôöùûüÿçÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇ]+(,[a-zA-Z0-9\\sàâäéèêëïîôöùûüÿçÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇ]*)*$", message = "Les valeurs doivent être séparées par des virgules et peuvent contenir des lettres, des nombres et des espaces")    private String valeurs;
 }

@@ -30,8 +30,12 @@ public class UtilisateurController {
     @PostMapping("/connexion")
     public Response<?> connexion(String email, String motDePasse) {
         Optional<Utilisateur> utilisateur = utilisateurService.findByEmailAndMotDePasse(email, motDePasse);
-        if (utilisateur.isPresent())
-            return Response.send(HttpStatus.OK, "success","Connexion réussie", tokenService.createFor(utilisateur.get()));
+        if (utilisateur.isPresent()) {
+            Utilisateur utilisateurR = utilisateur.get();
+            if (utilisateurR.getLevel() != Utilisateur.LEVEL_ADMIN)
+                return Response.send(HttpStatus.OK, "error", "Vous n'êtes pas administrateur");
+            return Response.send(HttpStatus.OK, "success","Connexion réussie", tokenService.createFor(utilisateurR));
+        }
         return Response.send(HttpStatus.OK, "error", "Login ou mot de passe incorrect");
     }
 

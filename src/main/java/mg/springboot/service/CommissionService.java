@@ -37,7 +37,7 @@ public class CommissionService {
             return resultats;
         }
         if(commission2.getMinPrix() >= commission1.getMinPrix() && commission2.getMinPrix() <= commission1.getMaxPrix()) {
-            Commission temp = new Commission(commission1.getMinPrix(), commission2.getMinPrix()-1, commission1.getPourcentage());
+            Commission temp = new Commission(commission1.getMinPrix(), commission2.getMinPrix(), commission1.getPourcentage());
             resultats.add(temp);
             if(commission1.getMaxPrix() <= commission2.getMaxPrix()) {
                 temp = new Commission(commission2.getMinPrix(), commission2.getMaxPrix(), commission2.getPourcentage());
@@ -45,23 +45,15 @@ public class CommissionService {
             } else {
                 temp = new Commission(commission2.getMinPrix(), commission2.getMaxPrix(), commission2.getPourcentage());
                 resultats.add(temp);
-                temp = new Commission(commission2.getMaxPrix()+1, commission1.getMaxPrix(), commission1.getPourcentage());
+                temp = new Commission(commission2.getMaxPrix(), commission1.getMaxPrix(), commission1.getPourcentage());
                 resultats.add(temp);
             }
+            return resultats;
         }
-        if(commission1.getMinPrix() >= commission2.getMinPrix() && commission1.getMinPrix() <= commission2.getMaxPrix()) {
-            Commission temp = new Commission(commission2.getMinPrix(), commission1.getMinPrix()-1, commission2.getPourcentage());
-            resultats.add(temp);
-            if(commission2.getMaxPrix() <= commission1.getMaxPrix()) {
-                temp = new Commission(commission1.getMinPrix(), commission1.getMaxPrix(), commission1.getPourcentage());
-                resultats.add(temp);
-            } else {
-                temp = new Commission(commission1.getMinPrix(), commission1.getMaxPrix(), commission1.getPourcentage());
-                resultats.add(temp);
-                temp = new Commission(commission1.getMaxPrix()+1, commission2.getMaxPrix(), commission2.getPourcentage());
-                resultats.add(temp);
-            }
-        }
+        Commission temp = new Commission(commission2.getMinPrix(), commission2.getMaxPrix(), commission2.getPourcentage());
+        resultats.add(temp);
+        temp = new Commission(commission2.getMaxPrix(), commission1.getMaxPrix(), commission1.getPourcentage());
+        resultats.add(temp);
         return resultats;
     }
 
@@ -104,7 +96,7 @@ public class CommissionService {
     public Commission getCommission(LocalDateTime localDateTime, double valeur) {
         List<Commission> commissions = getCommissions(localDateTime);
         for(Commission commission : commissions) {
-            if(valeur >= commission.getMinPrix() && valeur <= commission.getMaxPrix())
+            if(valeur >= commission.getMinPrix() && valeur < commission.getMaxPrix())
                 return commission;
         }
         return null;
