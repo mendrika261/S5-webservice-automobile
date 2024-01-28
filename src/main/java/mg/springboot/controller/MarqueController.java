@@ -19,6 +19,7 @@ import java.util.Optional;
 @RestController
 @Setter
 @Getter
+@RequestMapping("/admin")
 public class MarqueController {
     private final MarqueService marqueService;
     private final TokenService tokenService;

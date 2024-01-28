@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Getter
 @Setter
+@RequestMapping("/admin")
 public class PaiementController {
     PaiementService paiementService;
 

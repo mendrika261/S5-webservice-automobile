@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
+@RequestMapping("/admin")
 public class CommissionController {
     private final CommissionService commissionService;
 
@@ -40,12 +41,12 @@ public class CommissionController {
     @PostMapping("/commissions")
     public Response<?> changeCommission(@Valid Commission commission)
     {
-        return Response.send(HttpStatus.OK, "success", commissionService.save(commission));
+        return Response.send(HttpStatus.OK, "success", "La mise à jour est enregistrée", commissionService.save(commission));
     }
 
     @DeleteMapping("/commissions")
     public Response<?> deleteCommission(Integer id)
     {
-        return Response.send(HttpStatus.OK, "success", commissionService.delete(id));
+        return Response.send(HttpStatus.OK, "success", "Le changement est supprimé", commissionService.delete(id));
     }
 }

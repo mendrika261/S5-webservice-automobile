@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/admin")
 public class AnnonceController {
     private final AnnonceService annonceService;
     private final TokenService tokenService;

@@ -1,6 +1,7 @@
 package mg.springboot.repository;
 
 import mg.springboot.entity.Annonce;
+import mg.springboot.entity.Utilisateur;
 import mg.springboot.entity.Voiture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -79,9 +80,9 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
 
     @Query(value = "select count(distinct t.utilisateur_id) filter (where last_activity + duration * interval '1 second' > now()) active," +
             "count(distinct u.id) total, " +
-            "       round(cast(count(*) filter (where last_activity + duration * interval '1 second' > now()) as decimal) / COALESCE(NULLIF(count(distinct u.id),0),1) * 100, 2) pourcentage " +
+            "       round(cast(count(distinct t.utilisateur_id) filter (where last_activity + duration * interval '1 second' > now()) as decimal) / COALESCE(NULLIF(count(distinct u.id),0),1) * 100, 2) pourcentage " +
             "from token t " +
-            "right join utilisateur u on u.id = t.utilisateur_id where deleted is false", nativeQuery = true)
+            "right join utilisateur u on u.id = t.utilisateur_id where deleted is false and level < " + Utilisateur.LEVEL_ADMIN, nativeQuery = true)
     Object getStatsUtilisateurEnLigne();
 
     @Query(value = "select count(*) filter ( where date_validation is null ) en_attente, " +
@@ -108,7 +109,7 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
             "        count(*) total, " +
             "     round(cast(count(*) filter ( where v.id is not null ) as decimal) / COALESCE(NULLIF(count(*),0),1) * 100,2) pourcentage " +
             "from utilisateur " +
-            "left join voiture v on utilisateur.id = v.utilisateur_id", nativeQuery = true)
+            "left join voiture v on utilisateur.id = v.utilisateur_id where level <"+Utilisateur.LEVEL_ADMIN, nativeQuery = true)
     Object getNbUtilisateur();
 
     @Query(value = "select count(*) filter ( where premiere_main = true ) as premiere_main, " +

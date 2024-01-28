@@ -12,14 +12,12 @@ import mg.springboot.service.FavoriService;
 import mg.springboot.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Getter
 @Setter
+@RequestMapping("/admin")
 public class FavoriController {
     FavoriService favoriService;
     TokenService tokenService;

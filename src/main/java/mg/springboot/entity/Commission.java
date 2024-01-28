@@ -39,11 +39,15 @@ public class Commission {
     private @NotNull(message = "La date d'application doit être renseignée")
     LocalDateTime dateApplication;
 
-    public Commission(Double maxPrix, Double minPrix, Double pourcentage, LocalDateTime dateApplication) {
+    public Commission(Double minPrix, Double maxPrix, Double pourcentage, LocalDateTime dateApplication) {
         this.maxPrix = maxPrix;
         this.minPrix = minPrix;
         this.pourcentage = pourcentage;
         this.dateApplication = dateApplication;
+    }
+
+    public Commission(Double minPrix, Double maxPrix, Double pourcentage) {
+        this(minPrix, maxPrix, pourcentage, LocalDateTime.now());
     }
 
     @Override

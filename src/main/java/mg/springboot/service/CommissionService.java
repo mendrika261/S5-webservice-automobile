@@ -26,19 +26,41 @@ public class CommissionService {
     }
 
     Set<Commission> fusionnerCommission(Commission commission1, Commission commission2) {
-        Set<Commission> resultats = new HashSet<Commission>();
-        if(commission2.getMinPrix() >= commission1.getMinPrix() && commission2.getMinPrix() <= commission1.getMaxPrix()) {
-            if(commission2.getMaxPrix() <= commission1.getMaxPrix()) {
-                resultats.add(new Commission(commission1.getMaxPrix(), commission2.getMaxPrix(), commission1.getPourcentage(), commission1.getDateApplication()));
-                resultats.add(new Commission(commission2.getMaxPrix(), commission2.getMinPrix(), commission2.getPourcentage(), commission2.getDateApplication()));
-                resultats.add(new Commission(commission2.getMinPrix(), commission1.getMinPrix(), commission1.getPourcentage(), commission1.getDateApplication()));
-            } else {
-                resultats.add(new Commission(commission1.getMaxPrix(), commission2.getMinPrix(), commission1.getPourcentage(), commission1.getDateApplication()));
-                resultats.add(new Commission(commission2.getMinPrix(), commission1.getMinPrix(), commission2.getPourcentage(), commission2.getDateApplication()));
-            }
-        } else {
+        Set<Commission> resultats = new HashSet<>();
+        if(commission2.getMinPrix() > commission1.getMaxPrix() ^ commission2.getMaxPrix() < commission1.getMinPrix()) {
             resultats.add(commission1);
             resultats.add(commission2);
+            return resultats;
+        }
+        if(commission2.getMinPrix() <= commission1.getMinPrix() && commission2.getMaxPrix() >= commission1.getMaxPrix()) {
+            resultats.add(commission2);
+            return resultats;
+        }
+        if(commission2.getMinPrix() >= commission1.getMinPrix() && commission2.getMinPrix() <= commission1.getMaxPrix()) {
+            Commission temp = new Commission(commission1.getMinPrix(), commission2.getMinPrix()-1, commission1.getPourcentage());
+            resultats.add(temp);
+            if(commission1.getMaxPrix() <= commission2.getMaxPrix()) {
+                temp = new Commission(commission2.getMinPrix(), commission2.getMaxPrix(), commission2.getPourcentage());
+                resultats.add(temp);
+            } else {
+                temp = new Commission(commission2.getMinPrix(), commission2.getMaxPrix(), commission2.getPourcentage());
+                resultats.add(temp);
+                temp = new Commission(commission2.getMaxPrix()+1, commission1.getMaxPrix(), commission1.getPourcentage());
+                resultats.add(temp);
+            }
+        }
+        if(commission1.getMinPrix() >= commission2.getMinPrix() && commission1.getMinPrix() <= commission2.getMaxPrix()) {
+            Commission temp = new Commission(commission2.getMinPrix(), commission1.getMinPrix()-1, commission2.getPourcentage());
+            resultats.add(temp);
+            if(commission2.getMaxPrix() <= commission1.getMaxPrix()) {
+                temp = new Commission(commission1.getMinPrix(), commission1.getMaxPrix(), commission1.getPourcentage());
+                resultats.add(temp);
+            } else {
+                temp = new Commission(commission1.getMinPrix(), commission1.getMaxPrix(), commission1.getPourcentage());
+                resultats.add(temp);
+                temp = new Commission(commission1.getMaxPrix()+1, commission2.getMaxPrix(), commission2.getPourcentage());
+                resultats.add(temp);
+            }
         }
         return resultats;
     }
@@ -76,9 +98,7 @@ public class CommissionService {
             }
             resultats = resultatsTemp;
         }
-        return removeDuplicated(resultats).stream().sorted((o1, o2) -> {
-            return o1.getMaxPrix().compareTo(o2.getMaxPrix());
-        }).toList();
+        return removeDuplicated(resultats).stream().sorted(Comparator.comparing(Commission::getMaxPrix).thenComparing(Commission::getMinPrix)).toList();
     }
 
     public Commission getCommission(LocalDateTime localDateTime, double valeur) {

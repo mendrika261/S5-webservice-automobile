@@ -31,40 +31,55 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = ((HttpServletResponse) servletResponse);
-        Response<?> response;
+        Response<?> response = null;
 
         // Cors Parameters
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
-        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
-        httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, Origin, Access-Control-Request-Method");
+
+        if(httpRequest.getMethod().equals("OPTIONS")) { // allow preflight request
+            httpResponse.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
 
         String uri = httpRequest.getRequestURI();
-        List<Page> pages = pageRepository.findAllByUrlStartingWith(uri.toLowerCase());
-        if (pages.isEmpty()) {
-            /* httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response = Response.notFound("Page not found (Mety mbola tsy ao anaty base de données?)"); */
-            // By pass for dev
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        } else {
+        List<Page> pages = pageRepository.findAllByUrlStartsWith(uri.toLowerCase());
+        if(!pages.isEmpty()) {
             int level = 0;
             Token token = tokenService.getToken(httpRequest);
             if (token != null) {
                 if(token.isValid()) {
                     level = token.getUtilisateur().getLevel();
                     tokenService.updateLastActivityByValue(LocalDateTime.now(), token);
-                } else if (!token.isDeleted())
+                    for (Page page : pages) {
+                        if (page.isValid(level)) {
+                            filterChain.doFilter(servletRequest, servletResponse);
+                            return;
+                        } else {
+                            httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response = Response.denied("Vous n'avez pas le droit d'accéder à cette page");
+                        }
+                    }
+                } else {
                     tokenService.delete(token);
-            }
-
-            for (Page page : pages) {
-                if (page.isValid(level)) {
-                    filterChain.doFilter(servletRequest, servletResponse);
-                    return;
+                    httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response = Response.denied("Votre session a expiré");
+                }
+            } else {
+                for (Page page : pages) {
+                    if (page.getLevel() == 0) {
+                        filterChain.doFilter(servletRequest, servletResponse);
+                        return;
+                    } else {
+                        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response = Response.denied("Vous devez vous connecter pour accéder à cette page");
+                    }
                 }
             }
-            httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response = Response.denied("Vous n'avez pas accès à cette page");
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
         }
 
         httpResponse.setContentType("application/json");

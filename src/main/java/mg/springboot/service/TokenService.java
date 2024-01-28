@@ -26,8 +26,12 @@ public class TokenService {
     public Token getToken(HttpServletRequest request) {
         String bearerToken = Token.getBearerToken(request);
         if(bearerToken != null) {
-            UUID uuid = UUID.fromString(bearerToken);
-            return tokenRepository.findByValue(uuid).orElse(null);
+            try {
+                UUID uuid = UUID.fromString(bearerToken);
+                return tokenRepository.findByValue(uuid).orElse(null);
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
         }
         return null;
     }

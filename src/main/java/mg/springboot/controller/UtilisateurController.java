@@ -49,47 +49,47 @@ public class UtilisateurController {
         return Response.send(HttpStatus.OK, "success", "Déconnexion réussie", token);
     }
 
-    @GetMapping("/utilisateurs")
+    @GetMapping("/admin/utilisateurs")
     public Response<?> getUtilisateurs() {
         return Response.send(HttpStatus.OK, "success", utilisateurService.findAll());
     }
 
-    @GetMapping("/utilisateurs/{id}")
+    @GetMapping("/admin/utilisateurs/{id}")
     public Response<?> getUtilisateurs(@PathVariable String id) {
         return Response.send(HttpStatus.OK, "success", utilisateurService.findById(id));
     }
 
-    @PostMapping("/utilisateurs")
+    @PostMapping("/admin/utilisateurs")
     public Response<?> addUtilisateur(@Valid Utilisateur utilisateur) {
         return Response.send(HttpStatus.OK, "success", "L'utilisateur a été ajouté",
                     utilisateurService.save(utilisateur));
     }
 
-    @PutMapping("/utilisateurs/{id}")
+    @PutMapping("/admin/utilisateurs/{id}")
     public Response<?> modifyUtilisateur(@PathVariable String id, Utilisateur utilisateur) {
         return Response.send(HttpStatus.OK, "success", "L'utilisateur a été modifié",
                     utilisateurService.modify(id, utilisateur));
     }
 
-    @DeleteMapping("/utilisateurs/{id}")
+    @DeleteMapping("/admin/utilisateurs/{id}")
     public Response<?> deleteUtilisateur(@PathVariable String id) {
         return Response.send(HttpStatus.OK, "success", "L'utilisateur a été supprimé",
                     utilisateurService.delete(id));
     }
 
-    @DeleteMapping("/utilisateurs/{id}/photo/{photoId}")
+    @DeleteMapping("/admin/utilisateurs/{id}/photo/{photoId}")
     public Response<?> deletePhoto(@PathVariable String id, @PathVariable Integer photoId) {
         return Response.send(HttpStatus.OK, "success", "La photo a été supprimée",
                     utilisateurService.deletePhoto(id, photoId));
     }
 
-    @PutMapping("/utilisateurs/{id}/photo/{photoId}")
+    @PutMapping("/admin/utilisateurs/{id}/photo/{photoId}")
     public Response<?> modifyPhoto(@PathVariable String id, @PathVariable Integer photoId) {
         return Response.send(HttpStatus.OK, "success", "La photo a été modifiée",
                     utilisateurService.modifyPhoto(id, photoId));
     }
 
-    @PutMapping("/utilisateurs/{id}/mot-de-passe")
+    @PutMapping("/admin/utilisateurs/{id}/mot-de-passe")
     public Response<?> modifyMotDePasse(@PathVariable String id, String motDePasse, String nouveauMotDePasse) {
         return Response.send(HttpStatus.OK, "success", "Le mot de passe a été modifié",
                     utilisateurService.modifyMotDePasse(id, motDePasse, nouveauMotDePasse));

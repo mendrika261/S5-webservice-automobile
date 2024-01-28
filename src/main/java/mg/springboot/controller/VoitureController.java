@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/admin")
 public class VoitureController {
     private final VoitureService voitureService;
     private final TokenService tokenService;

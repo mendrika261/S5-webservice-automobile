@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Setter
 @Getter
+@RequestMapping("/admin")
 public class ModeleController {
     ModeleService modeleService;
 
