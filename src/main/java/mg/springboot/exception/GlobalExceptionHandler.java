@@ -60,4 +60,11 @@ public class GlobalExceptionHandler {
             DataIntegrityViolationException ex) {
         return Response.send(HttpStatus.BAD_REQUEST, "error", "Cet objet existe déjà");
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(Exception.class)
+    public Response<?> handleExceptions(
+            Exception ex) {
+        return Response.send(HttpStatus.BAD_REQUEST, "error", ex.getMessage());
+    }
 }

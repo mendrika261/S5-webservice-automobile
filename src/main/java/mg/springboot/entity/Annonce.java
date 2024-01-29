@@ -30,7 +30,7 @@ public class Annonce {
 
     @Column(name = "date", nullable = false)
     @NotNull(message = "La date de création de l'annonce doit être renseignée")
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @Column(name = "prix", nullable = false)
     @NotNull(message = "Le prix de l'annonce doit être renseigné")
@@ -60,7 +60,6 @@ public class Annonce {
     public static final int ETAT_EXPIRE = 20;
     @Transient
     public static final int ETAT_REFUSE = -10;
-
     @Transient
     public static final int ETAT_VENDUE = 30;
 

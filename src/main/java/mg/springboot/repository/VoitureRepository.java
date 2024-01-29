@@ -130,4 +130,6 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
             "left join vente v on annonce.id = v.annonce_id " +
             "join commission c on v.commission_id = c.id", nativeQuery = true)
     Object getNbVente();
+
+    List<Voiture> findAllByUtilisateurId(String id);
 }
