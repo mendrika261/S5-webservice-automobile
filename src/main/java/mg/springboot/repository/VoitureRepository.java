@@ -125,10 +125,9 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
     Object getNbAnnonce();
 
     @Query(value = "SELECT count(*) filter ( where v.id is not null ) vendu, " +
-            "       coalesce(sum(prix * (c.pourcentage / 100)), 0) as commission " +
+            "       0 " +
             "from annonce " +
-            "left join vente v on annonce.id = v.annonce_id " +
-            "join commission c on v.commission_id = c.id", nativeQuery = true)
+            "left join vente v on annonce.id = v.annonce_id", nativeQuery = true)
     Object getNbVente();
 
     List<Voiture> findAllByUtilisateurId(String id);

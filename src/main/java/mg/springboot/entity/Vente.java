@@ -28,12 +28,6 @@ public class Vente {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Paiement paiement;
 
-    @ManyToOne
-    @JoinColumn(name = "commission_id")
-    @NotNull(message = "La commission doit etre renseignee ")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Commission commission;
-
     @Column(name = "remise")
     private Double remise;
 
