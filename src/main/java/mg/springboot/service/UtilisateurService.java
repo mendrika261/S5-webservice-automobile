@@ -107,7 +107,8 @@ public class UtilisateurService {
     @Transactional
     public Utilisateur modifyPhoto(String id, Integer photoId) {
         Utilisateur utilisateur = findById(id);
-        deletePhoto(id, utilisateur.getPhoto().getId());
+        if(utilisateur.getPhoto() != null)
+            deletePhoto(id, utilisateur.getPhoto().getId());
         Optional<Fichier> photo = fichierRepository.findById(photoId);
         if(photo.isEmpty())
             throw new NotFoundException("La photo n'existe pas");
