@@ -44,9 +44,8 @@ public class AnnonceService {
                 .toList();
     }
 
-    public List<Annonce> findAllEnAttente(Integer page, Integer size) {
-        PageRequest pageable = PageRequest.of(page, size);
-        return annonceRepository.findAllByEtat(Annonce.ETAT_NON_VALIDE, pageable).stream()
+    public List<Annonce> findAllEnAttente() {
+        return annonceRepository.findAllByEtat(Annonce.ETAT_NON_VALIDE).stream()
                 .peek(annonce -> annonce
                     .setCommission(commissionService
                     .getCommission(annonce.getDate(), annonce.getPrix())))
@@ -96,7 +95,6 @@ public class AnnonceService {
 
     public Annonce save(Annonce annonce) {
         try {
-
             Annonce annonce1= annonceRepository.save(annonce);
             if(annonce.getEtat()==Annonce.ETAT_NON_VALIDE)
             {

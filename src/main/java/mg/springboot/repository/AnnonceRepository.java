@@ -25,6 +25,7 @@ public interface AnnonceRepository extends JpaRepository<Annonce, Integer>, Pagi
     List<Annonce> findByVoiture_EtatVoitureInAndVoiture_CouleurIn(Collection<EtatVoiture> etatVoitures, Collection<Couleur> couleurs);
 
     List<Annonce> findByEtatAndVoiture_UtilisateurNot(Integer etat, Utilisateur utilisateur);
+    List<Annonce> findAllByEtat(int i);
     List<Annonce> findAllByEtat(int i, PageRequest pageable);
 
     List<Annonce> findAllByEtatAndVoitureUtilisateurId(int etat, String idUtilisateur);

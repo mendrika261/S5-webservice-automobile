@@ -3,7 +3,6 @@ package mg.springboot.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import mg.springboot.entity.*;
-import mg.springboot.repository.EtatVoitureRepository;
 import mg.springboot.exception.AccessDeniedException;
 import mg.springboot.security.Response;
 import mg.springboot.security.Token;
@@ -32,14 +31,14 @@ public class AnnonceController {
         return Response.send(HttpStatus.OK, "success", annonceService.findAll());
     }
 
-    @PostMapping("/annonces/filter")
+    @GetMapping("/api/annonces/filter")
     public Response<?> findFilter(@RequestBody FilterRequest filterRequest) {
         return Response.send(HttpStatus.OK, "success", annonceService.test_filter(filterRequest));
     }
 
     @GetMapping("/admin/annonces/en-attente")
-    public Response<?> findAllEnAttente(Integer page, Integer size) {
-        return Response.send(HttpStatus.OK, "success", annonceService.findAllEnAttente(page, size));
+    public Response<?> findAllEnAttente() {
+        return Response.send(HttpStatus.OK, "success", annonceService.findAllEnAttente());
     }
 
     @GetMapping("/api/annonces")

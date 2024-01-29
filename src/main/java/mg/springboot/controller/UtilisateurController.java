@@ -164,7 +164,7 @@ public class UtilisateurController {
         Voiture voitureR = voitureRepository.findById(id).get();
         if (token.getUtilisateur().getId().equals(voitureR.getUtilisateur().getId()))
             return Response.send(HttpStatus.OK, "success", "La voiture a été modifiée",
-                        voitureRepository.save(voiture));
+                        voitureService.modify(id, voiture));
         throw new AccessDeniedException("Vous n'avez pas le droit de modifier cette voiture");
     }
 
@@ -186,4 +186,5 @@ public class UtilisateurController {
                         annonceService.save(annonce));
         throw new AccessDeniedException("Vous n'avez pas le droit d'ajouter cette annonce à cet utilisateur");
     }
+
 }

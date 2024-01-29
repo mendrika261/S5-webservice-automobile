@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Setter
 @Getter
-@RequestMapping("/admin")
 public class CouleurController {
     CouleurService couleurService;
 
@@ -21,29 +20,29 @@ public class CouleurController {
         this.couleurService = couleurService;
     }
 
-    @GetMapping("/couleurs")
+    @GetMapping({"/admin/couleurs", "/api/couleurs"})
     public Response<?> getcouleurs() {
         return Response.send(HttpStatus.OK, "success", couleurService.findAll());
     }
 
-    @GetMapping("/couleurs/{id}")
+    @GetMapping({"/admin/couleurs/{id}", "/api/couleurs/{id}"})
     public Response<?> getcouleurs(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", couleurService.findById(id));
     }
 
-    @PostMapping("/couleurs")
+    @PostMapping({"/admin/couleurs", "/api/couleurs"})
     public Response<?> addcouleurs(@Valid Couleur couleur) {
         return Response.send(HttpStatus.OK, "success", "La couleur a été ajouté",
                 couleurService.save(couleur));
     }
 
-    @PutMapping("/couleurs/{id}")
+    @PutMapping("/admin/couleurs/{id}")
     public Response<?> modifycouleurs(@PathVariable int id, @Valid Couleur couleur) {
         return Response.send(HttpStatus.OK, "success", "La couleur a été modifié",
                 couleurService.modify(id, couleur));
     }
 
-    @DeleteMapping("/couleurs/{id}")
+    @DeleteMapping("/admin/couleurs/{id}")
     public Response<?> deletecouleurs(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", "La couleur a été supprimé",
                 couleurService.delete(id));

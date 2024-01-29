@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -23,11 +25,13 @@ public class Vente {
     @ManyToOne
     @JoinColumn(name = "paiement_id")
     @NotNull(message = "Le mode de paiement doit etre renseignee ")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Paiement paiement;
 
     @ManyToOne
     @JoinColumn(name = "commission_id")
     @NotNull(message = "La commission doit etre renseignee ")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Commission commission;
 
     @Column(name = "remise")
@@ -36,6 +40,7 @@ public class Vente {
     @ManyToOne
     @JoinColumn(name = "utilisateur_acheteur_id")
     @NotNull(message = "L'acheteur doit etre renseignee ")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Utilisateur utilisateurAcheteur;
 
     @Column(name = "prix_vente")

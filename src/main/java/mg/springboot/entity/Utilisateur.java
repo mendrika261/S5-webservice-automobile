@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -51,7 +53,8 @@ public class Utilisateur {
     private int level = LEVEL_USER;
 
     @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "fichier_id", nullable = true)
+    @JoinColumn(name = "fichier_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Fichier photo;
 
     @Transient
