@@ -2,10 +2,12 @@ package mg.springboot.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import mg.springboot.entity.Annonce;
+import mg.springboot.entity.*;
+import mg.springboot.repository.EtatVoitureRepository;
 import mg.springboot.security.Response;
 import mg.springboot.security.Token;
 import mg.springboot.service.AnnonceService;
+import mg.springboot.service.EtatVoitureService;
 import mg.springboot.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +19,25 @@ import java.util.List;
 public class AnnonceController {
     private final AnnonceService annonceService;
     private final TokenService tokenService;
+    private final EtatVoitureService etatVoitureService;
 
-    public AnnonceController(AnnonceService annonceService, TokenService tokenService) {
+
+
+    public AnnonceController(AnnonceService annonceService, TokenService tokenService, EtatVoitureService etatVoitureService) {
         this.annonceService = annonceService;
         this.tokenService = tokenService;
+        this.etatVoitureService = etatVoitureService;
     }
 
     @GetMapping("/annonces")
     public Response<?> findAll() {
 
         return Response.send(HttpStatus.OK, "success", annonceService.findAll());
+    }
+
+    @PostMapping("/annonces/filter")
+    public Response<?> findFilter(@RequestBody FilterRequest filterRequest) {
+        return Response.send(HttpStatus.OK, "success", annonceService.test_filter(filterRequest));
     }
 
     @GetMapping("/annonces/en-attente")

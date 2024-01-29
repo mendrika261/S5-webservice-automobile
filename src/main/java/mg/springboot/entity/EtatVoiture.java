@@ -21,4 +21,8 @@ public class EtatVoiture {
     @NotNull(message = "La designation doit être renseignée")
     @NotBlank(message = "La designation ne doit pas être vide")
     private String designation;
+
+
+    public EtatVoiture() {
+    }
 }

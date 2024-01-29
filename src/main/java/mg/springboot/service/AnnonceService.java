@@ -1,14 +1,14 @@
 package mg.springboot.service;
 
-import mg.springboot.entity.Annonce;
-import mg.springboot.entity.HistoriqueEtatAnnonce;
-import mg.springboot.entity.Utilisateur;
+import mg.springboot.entity.*;
 import mg.springboot.exception.ValidationException;
 import mg.springboot.repository.AnnonceRepository;
+import mg.springboot.repository.EtatVoitureRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +17,17 @@ public class AnnonceService {
     private final AnnonceRepository annonceRepository;
     private final CommissionService commissionService;
     private final HistoriqueEtatAnnonceService historiqueEtatAnnonceService;
+    private final EtatVoitureService etatVoitureService;
+    private final CouleurService couleurService;
+    private final MarqueService marqueService;
 
-    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService, HistoriqueEtatAnnonceService historiqueEtatAnnonceService) {
+    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService, HistoriqueEtatAnnonceService historiqueEtatAnnonceService, EtatVoitureService etatVoitureService, CouleurService couleurService, MarqueService marqueService) {
         this.annonceRepository = annonceRepository;
         this.commissionService = commissionService;
         this.historiqueEtatAnnonceService = historiqueEtatAnnonceService;
+        this.etatVoitureService = etatVoitureService;
+        this.couleurService = couleurService;
+        this.marqueService = marqueService;
     }
 
     public List<Annonce> findAll() {
@@ -121,6 +127,39 @@ public class AnnonceService {
         Annonce modifAnnonce = findById(id);
         annonce.setId(modifAnnonce.getId());
         return save(annonce);
+    }
+
+    public List<Annonce> test_filter(FilterRequest filterRequest)
+    {
+        EtatVoiture[] etatVoitures=filterRequest.getEtatVoitures();
+        Couleur[] couleurs=filterRequest.getCouleurs();
+        Marque[] marques=filterRequest.getMarques();
+         if(etatVoitures.length==0)
+        {
+            List<EtatVoiture> etatVoituresL=etatVoitureService.getAll();
+            etatVoitures = new EtatVoiture[etatVoituresL.size()];
+            for (int i = 0; i < etatVoituresL.size(); i++) {
+                etatVoitures[i] = etatVoituresL.get(i);
+            }
+        }
+        if(couleurs.length==0)
+        {
+            List<Couleur> couleurs1=couleurService.findAll();
+            couleurs = new Couleur[couleurs1.size()];
+            for (int i = 0; i < couleurs1.size(); i++) {
+                couleurs[i] = couleurs1.get(i);
+            }
+        }
+
+        if(marques.length==0)
+        {
+            List<Marque> marques1=marqueService.getAll();
+            marques = new Marque[marques1.size()];
+            for (int i = 0; i < marques1.size(); i++) {
+                marques[i] = marques1.get(i);
+            }
+        }
+        return annonceRepository.findByVoiture_EtatVoitureInAndVoiture_CouleurInAndVoiture_SortieVoitureIn(Arrays.asList(etatVoitures),Arrays.asList(couleurs),Arrays.asList(marques));
     }
 
     public Annonce delete(Integer id) {
