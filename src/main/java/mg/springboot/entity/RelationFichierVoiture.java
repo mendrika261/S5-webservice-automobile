@@ -3,6 +3,8 @@ package mg.springboot.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -13,10 +15,12 @@ import java.time.LocalDate;
 public class RelationFichierVoiture {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "fichier_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Fichier fichier;
 
     @ManyToOne
     @JoinColumn(name = "voiture_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Voiture voiture;
 
     @Column(name = "date")

@@ -1,9 +1,12 @@
 package mg.springboot.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,16 +36,19 @@ public class Annonce {
     private LocalDateTime date = LocalDateTime.now();
 
     @Column(name = "prix", nullable = false)
+    @Min(value = 0, message = "Le prix de l'annonce doit être supérieur à 0")
     @NotNull(message = "Le prix de l'annonce doit être renseigné")
     private Double prix;
 
     @ManyToOne
     @JoinColumn(name = "validateur_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Utilisateur validateur;
 
     @ManyToOne
     @JoinColumn(name = "voiture_id", nullable = false, unique = true)
     @NotNull(message = "La voiture de l'annonce doit être renseignée")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Voiture voiture;
 
     @Transient

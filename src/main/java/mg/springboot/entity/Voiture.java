@@ -1,6 +1,7 @@
 package mg.springboot.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -37,23 +38,24 @@ public class Voiture {
     @NotNull(message = "La dernière date de contrôle technique doit être renseignée")
     private LocalDate dateControleTech;
 
-    @Column(name = "kilometrage")
+    @Column(name = "kilometrage", nullable = false)
     @NotNull(message = "Le kilométrage de la voiture doit être renseigné")
     private Double kilometrage;
 
-    @Column(name = "kilometrage_vidange")
+    @Column(name = "kilometrage_vidange", nullable = false)
     @NotNull(message = "Le kilométrage après le dernier vidange doit être renseigné")
     private Double kilometrageVidange;
 
-    @Column(name = "mise_en_circulation")
-    @NotNull(message = "La date de mise en circulation doit être renseignée")
+    @Column(name = "mise_en_circulation", nullable = false)
+    @NotNull(message = "L'année de mise en circulation doit être renseignée")
+    @Min(value = 1900, message = "L'année de mise en circulation doit être supérieure à 1900")
     private int miseEnCirculation;
 
     @Column(name = "description")
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id")
+    @JoinColumn(name = "utilisateur_id", nullable = false)
     @NotNull(message = "L'utilisateur doit être renseigné")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Utilisateur utilisateur;

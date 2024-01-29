@@ -2,11 +2,12 @@ package mg.springboot.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import mg.springboot.entity.Annonce;
+import mg.springboot.entity.*;
 import mg.springboot.exception.AccessDeniedException;
 import mg.springboot.security.Response;
 import mg.springboot.security.Token;
 import mg.springboot.service.AnnonceService;
+import mg.springboot.service.EtatVoitureService;
 import mg.springboot.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class AnnonceController {
     private final AnnonceService annonceService;
     private final TokenService tokenService;
+    private final EtatVoitureService etatVoitureService;
 
-    public AnnonceController(AnnonceService annonceService, TokenService tokenService) {
+
+
+    public AnnonceController(AnnonceService annonceService, TokenService tokenService, EtatVoitureService etatVoitureService) {
         this.annonceService = annonceService;
         this.tokenService = tokenService;
+        this.etatVoitureService = etatVoitureService;
     }
 
     @GetMapping("/admin/annonces")
@@ -26,9 +31,14 @@ public class AnnonceController {
         return Response.send(HttpStatus.OK, "success", annonceService.findAll());
     }
 
+    @GetMapping("/api/annonces/filter")
+    public Response<?> findFilter(@RequestBody FilterRequest filterRequest) {
+        return Response.send(HttpStatus.OK, "success", annonceService.test_filter(filterRequest));
+    }
+
     @GetMapping("/admin/annonces/en-attente")
-    public Response<?> findAllEnAttente(Integer page, Integer size) {
-        return Response.send(HttpStatus.OK, "success", annonceService.findAllEnAttente(page, size));
+    public Response<?> findAllEnAttente() {
+        return Response.send(HttpStatus.OK, "success", annonceService.findAllEnAttente());
     }
 
     @GetMapping("/api/annonces")

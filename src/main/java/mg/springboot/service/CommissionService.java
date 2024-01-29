@@ -69,7 +69,6 @@ public class CommissionService {
                 }
             }
             if(!exist) {
-                commission.setId(id);
                 resultats.add(commission);
                 id++;
             }

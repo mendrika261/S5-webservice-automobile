@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,11 +22,13 @@ public class Favori {
     @ManyToOne
     @NotNull(message = "annonce obligatoire")
     @JoinColumn(name = "annonce_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Annonce annonce;
 
     @ManyToOne
     @NotNull(message = "utilisateur obligatoire")
     @JoinColumn(name = "utilisateur_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Utilisateur utilisateur;
 
     @Column(name = "date_action")

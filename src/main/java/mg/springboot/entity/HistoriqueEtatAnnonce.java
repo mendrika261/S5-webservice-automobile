@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +17,7 @@ public class HistoriqueEtatAnnonce {
     @ManyToOne
     @JoinColumn(name = "annonce_id")
     @NotNull(message = "Annonce obligatoire")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Annonce annonce;
 
     @Column(name = "data_action")

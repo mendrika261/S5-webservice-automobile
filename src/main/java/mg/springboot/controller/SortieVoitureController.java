@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Setter
 @Getter
-@RequestMapping("/admin")
 public class SortieVoitureController {
     private final SortieVoitureService sortieVoitureService;
     private final TokenService tokenService;
@@ -23,27 +22,27 @@ public class SortieVoitureController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping("/sortie_voitures/{id}")
+    @GetMapping("/admin/sortie_voitures/{id}")
     public Response<?> getSortieVoitures(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", sortieVoitureService.findById(id));
     }
 
 
-    @GetMapping("/sortie_voitures")
+    @GetMapping({"/admin/sortie_voitures", "/api/sortie_voitures"})
     public Response<?> getSortieVoitures()
     {
         return Response.send(HttpStatus.OK,"success",sortieVoitureService.getAll());
     }
 
 
-    @PostMapping("/sortie_voitures")
+    @PostMapping("/admin/sortie_voitures")
     public Response<?> addSortieVoiture(@Valid SortieVoiture sortieVoiture) {
         return Response.send(HttpStatus.OK, "success", "La sortie de voiture a été ajouté",
                 sortieVoitureService.save(sortieVoiture));
     }
 
 
-    @PutMapping("/sortie_voitures/{id}")
+    @PutMapping("/admin/sortie_voitures/{id}")
     public Response<?> modifySortieVoiture(@PathVariable Integer id, @Valid SortieVoiture sortieVoiture) {
         return Response.send(HttpStatus.OK, "success", "La sortie de voiture a été modifié",
                 sortieVoitureService.modify(id, sortieVoiture));
@@ -51,7 +50,7 @@ public class SortieVoitureController {
 
 
 
-    @DeleteMapping("/sortie_voitures/{id}")
+    @DeleteMapping("/admin/sortie_voitures/{id}")
     public Response<?> deleteSortieVoiture(@PathVariable Integer id) {
         return Response.send(HttpStatus.OK, "success", "La sortie de voiture a été supprimé",
                 sortieVoitureService.delete(id));
