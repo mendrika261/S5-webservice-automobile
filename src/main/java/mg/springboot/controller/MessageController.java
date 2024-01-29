@@ -1,12 +1,13 @@
 package mg.springboot.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import mg.springboot.entity.Discussion;
+import mg.springboot.model.Message;
 import mg.springboot.entity.Utilisateur;
 import mg.springboot.exception.AccessDeniedException;
 import mg.springboot.repository.MessageRepository;
 import mg.springboot.security.Response;
 import mg.springboot.security.Token;
+import mg.springboot.service.DiscussionService;
 import mg.springboot.service.TokenService;
 import mg.springboot.service.UtilisateurService;
 import org.springframework.http.HttpStatus;
@@ -21,24 +22,37 @@ import java.time.LocalDateTime;
 public class MessageController {
     private final MessageRepository messageRepository;
     private final TokenService tokenService;
-    private final UtilisateurService utilisateurService;
 
-    public MessageController(MessageRepository messageRepository, TokenService tokenService, UtilisateurService utilisateurService) {
+    private final UtilisateurService utilisateurService;
+    private final DiscussionService discussionService;
+
+    public MessageController(MessageRepository messageRepository, TokenService tokenService, UtilisateurService utilisateurService, DiscussionService discussionService) {
         this.messageRepository = messageRepository;
         this.tokenService = tokenService;
         this.utilisateurService = utilisateurService;
+        this.discussionService = discussionService;
     }
+    //    @GetMapping("/api/messages/utilisateurs/{id}")
+//    public Response<?> getMessages(HttpServletRequest request, @PathVariable("id") String idUtilisateur2) {
+//        Token token = tokenService.getToken(request);
+//        Utilisateur utilisateur1 = token.getUtilisateur();
+//        Utilisateur utilisateur2 = utilisateurService.findById(idUtilisateur2);
+//        if(utilisateur1.getId().equals(utilisateur2.getId()))
+//            throw new AccessDeniedException("Vous ne pouvez pas vous envoyer des messages à vous-même");
+//        return Response.send(HttpStatus.OK, "success",
+//                messageRepository.searchDiscussionByEnvoyeurIdOrReceveurIdOrderByDateheureDesc(utilisateur1.getId(), utilisateur2.getId()));
+//    }
 
-    @GetMapping("/api/messages/utilisateurs/{id}")
-    public Response<?> getMessages(HttpServletRequest request, @PathVariable("id") String idUtilisateur2) {
+    @GetMapping("/api/discussions/utilisateurs/{id}")
+    public Response<?> getDiscussions(HttpServletRequest request) {
         Token token = tokenService.getToken(request);
         Utilisateur utilisateur1 = token.getUtilisateur();
-        Utilisateur utilisateur2 = utilisateurService.findById(idUtilisateur2);
-        if(utilisateur1.getId().equals(utilisateur2.getId()))
-            throw new AccessDeniedException("Vous ne pouvez pas vous envoyer des messages à vous-même");
         return Response.send(HttpStatus.OK, "success",
-                messageRepository.searchDiscussionByEnvoyeurIdOrReceveurIdOrderByDateheureDesc(utilisateur1.getId(), utilisateur2.getId()));
+                discussionService.get_discussions(utilisateur1));
     }
+
+
+
 
     @PostMapping("/api/messages/utilisateurs/{id}")
     public Response<?> postMessage(HttpServletRequest request, @PathVariable("id") String idUtilisateur2, String message) {
@@ -48,6 +62,6 @@ public class MessageController {
         if(utilisateur1.getId().equals(utilisateur2.getId()))
             throw new AccessDeniedException("Vous ne pouvez pas vous envoyer des messages à vous-même");
         return Response.send(HttpStatus.OK, "success",
-                messageRepository.save(new Discussion(null, utilisateur1.getId(), utilisateur2.getId(), message, LocalDateTime.now())));
+                discussionService.envoyerMessage(utilisateur1,utilisateur2,message));
     }
 }

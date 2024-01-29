@@ -1,4 +1,4 @@
-package mg.springboot.entity;
+package mg.springboot.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-
 @Document
 @Getter
 @Setter
@@ -20,8 +18,8 @@ public class Discussion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String envoyeurId;
-    private String receveurId;
-    private String message;
-    private LocalDateTime dateheure;
+    private String utilisateur1;
+    private String utilisateur2;
+    private Message[] messages;
+
 }
