@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Getter
 @Setter
-@RequestMapping("/admin")
 public class FavoriController {
     FavoriService favoriService;
     TokenService tokenService;
@@ -29,7 +28,7 @@ public class FavoriController {
         this.annonceService = annonceService;
     }
 
-    @GetMapping("/favoris")
+    @GetMapping("/api/favoris")
     public Response<?> findAll(HttpServletRequest request)
     {
         Token token=tokenService.getToken(request);
@@ -40,7 +39,7 @@ public class FavoriController {
         return Response.send(HttpStatus.OK, "success", favoriService.findAll(token.getUtilisateur()));
     }
 
-    @GetMapping("/favoris/{id}")
+    @PostMapping("/api/favoris/{id}")
     public Response<?> addFavorite(@PathVariable("id") int id, HttpServletRequest request)
     {
         Token token=tokenService.getToken(request);
@@ -57,11 +56,11 @@ public class FavoriController {
             return Response.send(HttpStatus.OK, "error", e.getMessage());
 
         }
-        return Response.send(HttpStatus.OK, "success","Annonce ajoutee a vos favoris",favori);
+        return Response.send(HttpStatus.OK, "success","Annonce ajoutée a vos favoris",favori);
     }
 
 
-    @DeleteMapping("/favoris/{id}")
+    @DeleteMapping("/api/favoris/{id}")
     public Response<?> removeFavorite(@PathVariable("id") int id, HttpServletRequest request)
     {
         Token token=tokenService.getToken(request);

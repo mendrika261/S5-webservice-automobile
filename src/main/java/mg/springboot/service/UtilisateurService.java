@@ -6,10 +6,12 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import mg.springboot.entity.Fichier;
 import mg.springboot.entity.Utilisateur;
+import mg.springboot.entity.Voiture;
 import mg.springboot.exception.NotFoundException;
 import mg.springboot.exception.ValidationException;
 import mg.springboot.repository.FichierRepository;
 import mg.springboot.repository.UtilisateurRepository;
+import mg.springboot.repository.VoitureRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +24,15 @@ public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final Validator validator;
     private final FichierRepository fichierRepository;
+    private final VoitureRepository voitureRepository;
 
     public UtilisateurService(UtilisateurRepository utilisateurRepository, Validator validator,
-                              FichierRepository fichierRepository) {
+                              FichierRepository fichierRepository,
+                              VoitureRepository voitureRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.validator = validator;
         this.fichierRepository = fichierRepository;
+        this.voitureRepository = voitureRepository;
     }
 
     public Optional<Utilisateur> findByEmailAndMotDePasse(String login, String motDePasse) {
@@ -116,5 +121,9 @@ public class UtilisateurService {
             throw new ValidationException("Le mot de passe actuel est incorrect");
         utilisateur.setMotDePasse(nouveauMotDePasse);
         return save(utilisateur);
+    }
+
+    public List<Voiture> getVoitures(String id) {
+        return voitureRepository.findAllByUtilisateurId(id);
     }
 }

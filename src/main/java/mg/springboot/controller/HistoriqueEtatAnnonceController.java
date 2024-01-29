@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Setter
 @Getter
-@RequestMapping("/admin")
 public class HistoriqueEtatAnnonceController {
     HistoriqueEtatAnnonceService historiqueEtatAnnonceService;
     AnnonceService annonceService;
@@ -25,13 +24,9 @@ public class HistoriqueEtatAnnonceController {
         this.annonceService = annonceService;
     }
 
-    @GetMapping("/historiques_etats_annonces/{id}")
+    @GetMapping("/api/annonces/{id}/historiques")
     public Response<?> findAll(@PathVariable("id") int id) {
         Annonce annonce=annonceService.findById(id);
-        if(annonce==null)
-        {
-            return Response.send(HttpStatus.OK, "error","Annnonce inexistante" );
-        }
         return Response.send(HttpStatus.OK, "success", historiqueEtatAnnonceService.getAllByAnnonce(annonce));
     }
 }
