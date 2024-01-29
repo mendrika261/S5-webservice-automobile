@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Getter
 @Setter
-@RequestMapping("/admin")
 public class VenteController {
     TokenService tokenService;
     VenteService venteService;
@@ -28,7 +27,7 @@ public class VenteController {
         this.venteService = venteService;
     }
 
-    @PostMapping("/ventes")
+    @PostMapping("/api/ventes")
     public Response<?> finaliserVente(@Valid Vente vente, HttpServletRequest request)
     {
         Token token=tokenService.getToken(request);
