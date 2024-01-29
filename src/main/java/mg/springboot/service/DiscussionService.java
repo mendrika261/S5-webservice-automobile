@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Getter
@@ -42,6 +43,7 @@ public class DiscussionService {
         if(discussion==null)
         {
             discussion=new Discussion();
+            discussion.setId("id"+ UUID.randomUUID());
             discussion.setUtilisateur1(sender.getId());
             discussion.setUtilisateur2(receiver.getId());
             discussion.setMessages(new Message[1]);

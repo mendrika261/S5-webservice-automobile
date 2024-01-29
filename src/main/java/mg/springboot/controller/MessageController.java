@@ -32,16 +32,6 @@ public class MessageController {
         this.utilisateurService = utilisateurService;
         this.discussionService = discussionService;
     }
-    //    @GetMapping("/api/messages/utilisateurs/{id}")
-//    public Response<?> getMessages(HttpServletRequest request, @PathVariable("id") String idUtilisateur2) {
-//        Token token = tokenService.getToken(request);
-//        Utilisateur utilisateur1 = token.getUtilisateur();
-//        Utilisateur utilisateur2 = utilisateurService.findById(idUtilisateur2);
-//        if(utilisateur1.getId().equals(utilisateur2.getId()))
-//            throw new AccessDeniedException("Vous ne pouvez pas vous envoyer des messages à vous-même");
-//        return Response.send(HttpStatus.OK, "success",
-//                messageRepository.searchDiscussionByEnvoyeurIdOrReceveurIdOrderByDateheureDesc(utilisateur1.getId(), utilisateur2.getId()));
-//    }
 
     @GetMapping("/api/discussions/utilisateurs/{id}")
     public Response<?> getDiscussions(HttpServletRequest request) {
