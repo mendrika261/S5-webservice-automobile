@@ -33,7 +33,7 @@ public class MessageController {
         this.discussionService = discussionService;
     }
 
-    @GetMapping("/api/discussions/utilisateurs/{id}")
+    @GetMapping("/api/messages")
     public Response<?> getDiscussions(HttpServletRequest request) {
         Token token = tokenService.getToken(request);
         Utilisateur utilisateur1 = token.getUtilisateur();
@@ -44,11 +44,13 @@ public class MessageController {
 
 
 
-    @PostMapping("/api/messages/utilisateurs/{id}")
-    public Response<?> postMessage(HttpServletRequest request, @PathVariable("id") String idUtilisateur2, String message) {
+    @PostMapping("/api/messages")
+    public Response<?> postMessage(HttpServletRequest request, String idReceveur, String message) {
         Token token = tokenService.getToken(request);
         Utilisateur utilisateur1 = token.getUtilisateur();
-        Utilisateur utilisateur2 = utilisateurService.findById(idUtilisateur2);
+        Utilisateur utilisateur2 = utilisateurService.findById(idReceveur);
+        if(message == null || message.isEmpty())
+            throw new AccessDeniedException("Le message ne peut pas être vide");
         if(utilisateur1.getId().equals(utilisateur2.getId()))
             throw new AccessDeniedException("Vous ne pouvez pas vous envoyer des messages à vous-même");
         return Response.send(HttpStatus.OK, "success",

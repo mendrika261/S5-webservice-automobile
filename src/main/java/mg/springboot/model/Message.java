@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Document
 @Getter
@@ -18,8 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private String id = UUID.randomUUID().toString();
     private String message;
     private String sender;
     private LocalDateTime dateheure;

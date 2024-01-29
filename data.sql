@@ -2,6 +2,10 @@ INSERT INTO public.page (id, exact, level, url) VALUES (0, false, 20, '/admin');
 INSERT INTO public.page (id, exact, level, url) VALUES (1, false, 10, '/deconnexion');
 INSERT INTO public.page (id, exact, level, url) VALUES (2, true, 0, '/connexion');
 INSERT INTO public.page (id, exact, level, url) VALUES (3, true, 0, '/inscription');
+INSERT INTO public.page (id, exact, level, url) VALUES (5, false, 0, '/tokens/utilisateur');
+INSERT INTO public.page (id, exact, level, url) VALUES (6, true, 10, '/api');
+INSERT INTO public.page (id, exact, level, url) VALUES (7, true, 0, '/auth');
+
 
 INSERT INTO public.utilisateur (id, contact, email, level, mot_de_passe, nom, prenom, fichier_id) VALUES ('5c819151-7490-46b0-ab75-310694115d20', '032 19 203 29', 'zo@gmail.com', 20, '12345678', 'Zo', 'Randrianarison', null);
 INSERT INTO public.utilisateur (id, contact, email, level, mot_de_passe, nom, prenom, fichier_id) VALUES ('fef61249-5ec2-4dcf-858d-6c1b793c390a', '032 18 237 28', 'ravaka@gmail.com', 10, '12345678', 'Ravaka', 'Raharinirina', null);
@@ -195,6 +199,12 @@ INSERT INTO public.pays (id, code, nom) VALUES (17, 'tr', 'Turquie');
 INSERT INTO public.pays (id, code, nom) VALUES (18, 'nl', 'Pays-Bas');
 INSERT INTO public.pays (id, code, nom) VALUES (19, 'ch', 'Suisse');
 INSERT INTO public.pays (id, code, nom) VALUES (20, 'sa', 'Arabie Saoudite');
+
+INSERT INTO public.energie (id, nom) VALUES (1, 'Essence');
+INSERT INTO public.energie (id, nom) VALUES (2, 'Electrique');
+INSERT INTO public.energie (id, nom) VALUES (3, 'Hydrogène');
+INSERT INTO public.energie (id, nom) VALUES (4, 'Diesel');
+
 
 -- peugeot
 -- 206

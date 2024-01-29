@@ -43,7 +43,7 @@ public class DiscussionService {
         if(discussion==null)
         {
             discussion=new Discussion();
-            discussion.setId("id"+ UUID.randomUUID());
+            discussion.setId(UUID.randomUUID().toString());
             discussion.setUtilisateur1(sender.getId());
             discussion.setUtilisateur2(receiver.getId());
             discussion.setMessages(new Message[1]);
