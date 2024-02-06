@@ -154,7 +154,7 @@ public class UtilisateurController {
         Token token = tokenService.getToken(httpServletRequest);
         if (token.getUtilisateur().getId().equals(voiture.getUtilisateur().getId()))
             return Response.send(HttpStatus.OK, "success", "La voiture a été ajoutée",
-                        voitureRepository.save(voiture));
+                        voitureService.save(voiture));
         throw new AccessDeniedException("Vous n'avez pas le droit d'ajouter cette voiture à cet utilisateur");
     }
 

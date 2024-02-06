@@ -36,7 +36,8 @@ public class AuthFilter implements Filter {
         // Cors Parameters
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-        httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, Origin, Access-Control-Request-Method");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, Origin, Access-Control-Request-Method, ngrok-skip-browser-warning");
+        httpResponse.setHeader("Feature-Policy", "accelerometer *");
 
         if(httpRequest.getMethod().equals("OPTIONS")) { // allow preflight request
             httpResponse.setStatus(HttpServletResponse.SC_OK);

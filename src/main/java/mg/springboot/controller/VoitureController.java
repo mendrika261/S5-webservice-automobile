@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin")
 public class VoitureController {
     private final VoitureService voitureService;
     private final TokenService tokenService;
@@ -21,28 +20,28 @@ public class VoitureController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping("/voitures")
+    @GetMapping("/admin/voitures")
     public Response<?> getVoitures() {
         return Response.send(HttpStatus.OK, "success", voitureService.findAll());
     }
 
-    @GetMapping("/voitures/{id}")
+    @GetMapping({"/admin/voitures/{id}", "/api/voitures/{id}"})
     public Response<?> getVoiture(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", voitureService.findById(id));
     }
 
-    @PutMapping("/voitures/{id}")
+    @PutMapping("/admin/voitures/{id}")
     public Response<?> modifyVoiture(@PathVariable int id, @Valid Voiture voiture) {
         return Response.send(HttpStatus.OK, "success", "La voiture a été modifiée",
                 voitureService.modify(id, voiture));
     }
 
-    @PostMapping("/voitures")
+    @PostMapping("/admin/voitures")
     public Response<?> addVoiture(@Valid Voiture voiture) {
         return Response.send(HttpStatus.OK, "success", "La voiture a été ajoutée",
                 voitureService.save(voiture));
     }
-    @DeleteMapping("/voitures/{id}")
+    @DeleteMapping("/admin/voitures/{id}")
     public Response<?> deleteVoiture(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", "La voiture a été supprimée",
                 voitureService.delete(id));

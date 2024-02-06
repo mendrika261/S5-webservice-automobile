@@ -41,7 +41,7 @@ public class AnnonceController {
         return Response.send(HttpStatus.OK, "success", annonceService.findAllEnAttente());
     }
 
-    @GetMapping("/api/annonces")
+    @GetMapping("/annonces")
     public Response<?> findAllValide(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "5") Integer size,

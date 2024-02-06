@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Setter
 @Getter
-@RequestMapping("/admin")
 public class ModeleController {
     ModeleService modeleService;
 
@@ -22,29 +21,29 @@ public class ModeleController {
         this.modeleService = modeleService;
     }
 
-    @GetMapping("/modeles")
+    @GetMapping({"/admin/modeles", "/api/modeles"})
     public Response<?> getModeles() {
         return Response.send(HttpStatus.OK, "success", modeleService.findAll());
     }
 
-    @GetMapping("/modeles/{id}")
+    @GetMapping("/admin/modeles/{id}")
     public Response<?> getModeles(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", modeleService.findById(id));
     }
 
-    @PostMapping("/modeles")
+    @PostMapping("/admin/modeles")
     public Response<?> addModeles(@Valid Modele modele) {
         return Response.send(HttpStatus.OK, "success", "Le modele a été ajouté",
                 modeleService.save(modele));
     }
 
-    @PutMapping("/modeles/{id}")
+    @PutMapping("/admin/modeles/{id}")
     public Response<?> modifyModele(@PathVariable int id, @Valid Modele modele) {
         return Response.send(HttpStatus.OK, "success", "Le modele a été modifié",
                 modeleService.modify(id, modele));
     }
 
-    @DeleteMapping("/modeles/{id}")
+    @DeleteMapping("/admin/modeles/{id}")
     public Response<?> deleteModele(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", "Le modele a été supprimé",
                 modeleService.delete(id));

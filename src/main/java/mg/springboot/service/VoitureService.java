@@ -1,21 +1,29 @@
 package mg.springboot.service;
 
+import jakarta.transaction.Transactional;
 import mg.springboot.entity.Voiture;
 import mg.springboot.exception.NotFoundException;
 import mg.springboot.exception.ValidationException;
+import mg.springboot.repository.FichierRepository;
 import mg.springboot.repository.VoitureRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class VoitureService {
     private final VoitureRepository voitureRepository;
+    private final FichierRepository fichierRepository;
+    private final FichierService fichierService;
 
-    public VoitureService(VoitureRepository voitureRepository) {
+    public VoitureService(VoitureRepository voitureRepository,
+                          FichierRepository fichierRepository, FichierService fichierService) {
         this.voitureRepository = voitureRepository;
+        this.fichierRepository = fichierRepository;
+        this.fichierService = fichierService;
     }
 
     public List<Voiture> findAll() {
@@ -31,7 +39,8 @@ public class VoitureService {
 
     public Voiture save(Voiture voiture) {
         if(voiture.getSortieVoiture().getAnnee() > voiture.getMiseEnCirculation())
-            throw new ValidationException("La date de mise en circulation ne peut pas être antérieure à la date de sortie");
+            throw new ValidationException("La date de mise en circulation ne peut pas être antérieure à la date de sortie: " +
+                voiture.getSortieVoiture().getAnnee());
         try {
             return voitureRepository.save(voiture);
         } catch (DataIntegrityViolationException e) {
@@ -39,14 +48,24 @@ public class VoitureService {
         }
     }
 
+    @Transactional
     public Voiture modify(Integer id, Voiture voiture) {
         Voiture modifVoiture = findById(id);
         voiture.setId(modifVoiture.getId());
-        return save(voiture);
+        if (voiture.getPhotos() == null)
+            voiture.setPhotos(new ArrayList<>());
+        voiture.getPhotos().forEach(photo -> photo.setVoiture(voiture));
+        Voiture newV = save(voiture);
+        modifVoiture.getPhotos().forEach(photo -> {
+            if (!voiture.getPhotos().contains(photo))
+                fichierService.delete(photo.getId());
+        });
+        return newV;
     }
 
     public Voiture delete(Integer id) {
         Voiture voiture = findById(id);
+        fichierRepository.deleteAll(voiture.getPhotos());
         voitureRepository.delete(voiture);
         return voiture;
     }

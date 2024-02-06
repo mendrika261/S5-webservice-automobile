@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Setter
 @Getter
-@RequestMapping("/admin")
 public class FichierController {
     FichierService fichierService;
 
@@ -20,23 +19,23 @@ public class FichierController {
         this.fichierService = fichierService;
     }
 
-    @GetMapping("/fichiers")
+    @GetMapping("/admin/fichiers")
     public Response<?> getfichiers() {
         return Response.send(HttpStatus.OK, "success", fichierService.findAll());
     }
 
-    @GetMapping("/fichiers/{id}")
+    @GetMapping("/admin/fichiers/{id}")
     public Response<?> getfichier(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", fichierService.findById(id));
     }
 
-    @PostMapping("/fichiers")
+    @PostMapping({"/admin/fichiers", "/api/fichiers"})
     public Response<?> addfichiers(@Valid Fichier fichier) {
         return Response.send(HttpStatus.OK, "success", "Le fichier a été ajouté",
                 fichierService.save(fichier));
     }
 
-    @DeleteMapping("/fichiers/{id}")
+    @DeleteMapping("/admin/fichiers/{id}")
     public Response<?> deletefichier(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", "Le fichier a été supprimé", fichierService.delete(id));
     }

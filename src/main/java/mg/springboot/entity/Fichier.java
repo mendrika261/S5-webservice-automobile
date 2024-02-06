@@ -1,8 +1,11 @@
 package mg.springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -28,4 +31,14 @@ public class Fichier {
     @Column(name = "date_creation")
     private LocalDateTime dateCreation = LocalDateTime.now();
 
+    @ManyToOne
+    @JoinColumn(name = "voiture_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
+    private Voiture voiture;
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Fichier && ((Fichier) obj).getId().equals(this.id);
+    }
 }

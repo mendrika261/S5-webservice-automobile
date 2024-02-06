@@ -1,5 +1,6 @@
 package mg.springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -78,4 +80,9 @@ public class Voiture {
     @NotNull(message = "La couleur doit être renseignée")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Couleur couleur;
+
+    @OneToMany(mappedBy = "voiture", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonManagedReference
+    private List<Fichier> photos;
 }

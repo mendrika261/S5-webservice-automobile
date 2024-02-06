@@ -19,7 +19,7 @@ public class EtatVoitureController {
         this.etatVoitureService = etatVoitureService;
     }
 
-    @GetMapping({"/admin/etat_voitures", "/api/etat_voitures"})
+    @GetMapping({"/admin/etat_voitures", "/api/etat-voitures"})
     public Response<?> getEtatVoitures()
     {
         return Response.send(HttpStatus.OK,"success",etatVoitureService.getAll());
