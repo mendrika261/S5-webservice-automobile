@@ -62,8 +62,8 @@ public class AnnonceController {
     @GetMapping("/api/utilisateurs/{id}/annonces")
     public Response<?> findByIdUtilisateur(HttpServletRequest httpServletRequest, @PathVariable String id) {
         Token token = tokenService.getToken(httpServletRequest);
-        if(token.getUtilisateur().getId().equals(id))
-            return Response.send(HttpStatus.OK, "success", annonceService.findAllByIdUtilisateur(id));
+        if(token.getUtilisateur().getId().equals(id) || id.equalsIgnoreCase("undefined"))
+            return Response.send(HttpStatus.OK, "success", annonceService.findAllByIdUtilisateur(token.getUtilisateur().getId()));
         return Response.send(HttpStatus.OK, "success", annonceService.findAllByIdUtilisateurAndValide(id));
     }
 

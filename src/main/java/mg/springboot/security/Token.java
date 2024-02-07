@@ -38,6 +38,9 @@ public class Token {
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
 
+    @Column(name = "notification_token")
+    private String notificationToken;
+
     public Token() {
     }
 

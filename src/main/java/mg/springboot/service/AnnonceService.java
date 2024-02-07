@@ -197,17 +197,23 @@ public class AnnonceService {
 
 
     public List<Annonce> findAllByIdUtilisateur(String id) {
-        return annonceRepository.findAllByVoitureUtilisateurId(id);
+        return annonceRepository.findAllByVoitureUtilisateurId(id).stream()
+                .peek(annonce -> annonce
+                        .setCommission(commissionService
+                                .getCommission(annonce.getDate(), annonce.getPrix())))
+                .toList();
     }
 
     public List<Annonce> findAllByIdUtilisateurAndValide(String id) {
-        return annonceRepository.findAllByEtatAndVoitureUtilisateurId(Annonce.ETAT_VALIDE, id);
+        return annonceRepository.findAllByEtatAndVoitureUtilisateurId(Annonce.ETAT_VALIDE, id).stream()
+                .peek(annonce -> annonce
+                        .setCommission(commissionService
+                                .getCommission(annonce.getDate(), annonce.getPrix())))
+                .toList();
     }
 
     public Annonce modifierEtat(Integer id, Integer etat) {
         Annonce annonce = findById(id);
-        if (etat != Annonce.ETAT_VENDUE)
-            throw new ValidationException("Vous ne pouvez pas modifier l'état de l'annonce autre que vendue");
         annonce.setEtat(etat);
         return save(annonce);
     }

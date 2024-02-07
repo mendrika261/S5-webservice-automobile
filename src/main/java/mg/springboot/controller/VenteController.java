@@ -43,9 +43,8 @@ public class VenteController {
         } catch (Exception e)
         {
             return Response.send(HttpStatus.OK, "error", e.getMessage());
-
         }
-        return Response.send(HttpStatus.OK, "success","Vente effectuee",vente1);
+        return Response.send(HttpStatus.OK, "success","Vente effectuée",vente1);
     }
 
 

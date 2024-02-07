@@ -24,16 +24,16 @@ public class Vente {
 
     @ManyToOne
     @JoinColumn(name = "paiement_id")
-    @NotNull(message = "Le mode de paiement doit etre renseignee ")
+    @NotNull(message = "Le mode de paiement doit être renseigné")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Paiement paiement;
 
     @Column(name = "remise")
-    private Double remise;
+    private Double remise=0.;
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_acheteur_id")
-    @NotNull(message = "L'acheteur doit etre renseignee ")
+    @NotNull(message = "L'acheteur doit être renseigné")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Utilisateur utilisateurAcheteur;
 
