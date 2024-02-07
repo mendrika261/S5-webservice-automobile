@@ -12,6 +12,8 @@ import mg.springboot.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
+
 @RestController
 public class AnnonceController {
     private final AnnonceService annonceService;
@@ -91,13 +93,13 @@ public class AnnonceController {
     }
 
     @PutMapping("/admin/annonces/{id}/valider")
-    public Response<?> valider(HttpServletRequest httpServletRequest, @PathVariable Integer id) {
+    public Response<?> valider(HttpServletRequest httpServletRequest, @PathVariable Integer id) throws URISyntaxException {
         Token token = tokenService.getToken(httpServletRequest);
         return Response.send(HttpStatus.OK, "success", annonceService.valider(id, token.getUtilisateur()));
     }
 
     @PutMapping("/admin/annonces/{id}/refuser")
-    public Response<?> refuser(HttpServletRequest httpServletRequest, @PathVariable Integer id) {
+    public Response<?> refuser(HttpServletRequest httpServletRequest, @PathVariable Integer id) throws URISyntaxException {
         Token token = tokenService.getToken(httpServletRequest);
         return Response.send(HttpStatus.OK, "success", annonceService.refuser(id, token.getUtilisateur()));
     }

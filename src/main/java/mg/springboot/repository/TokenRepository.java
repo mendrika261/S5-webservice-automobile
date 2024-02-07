@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,4 +20,6 @@ public interface TokenRepository extends JpaRepository<Token, String> {
     void updateLastActivityByValue(LocalDateTime lastActivity, UUID value);
     void deleteByValue(UUID value);
     Optional<Token> findByValue(UUID value);
+
+    List<Token> findByUtilisateurIdAndNotificationTokenNotNull(String idUtilisateur);
 }

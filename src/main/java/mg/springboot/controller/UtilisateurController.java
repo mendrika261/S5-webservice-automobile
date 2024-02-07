@@ -55,7 +55,7 @@ public class UtilisateurController {
     }
 
     @PostMapping("/tokens/utilisateur")
-    public Response<?> connexionUtilisateur(HttpServletRequest request, String email, String motDePasse) {
+    public Response<?> connexionUtilisateur(HttpServletRequest request, String email, String motDePasse, String notificationToken) {
         Token token = tokenService.getToken(request);
         if (token != null)
             throw new AccessDeniedException("Vous êtes déjà connecté");
@@ -64,7 +64,7 @@ public class UtilisateurController {
             Utilisateur utilisateurR = utilisateur.get();
             if (utilisateurR.getLevel() != Utilisateur.LEVEL_USER)
                 return Response.send(HttpStatus.OK, "error", "Vous n'êtes pas utilisateur! Allez sur la page d'administration pour vous connecter");
-            return Response.send(HttpStatus.OK, "success","Connexion réussie", tokenService.createFor(utilisateurR));
+            return Response.send(HttpStatus.OK, "success","Connexion réussie", tokenService.createFor(utilisateurR, notificationToken));
         }
         return Response.send(HttpStatus.OK, "error", "Login ou mot de passe incorrect");
     }

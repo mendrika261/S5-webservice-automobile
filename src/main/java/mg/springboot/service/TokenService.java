@@ -17,10 +17,15 @@ public class TokenService {
         this.tokenRepository = utilisateurRepository;
     }
 
-    public Token createFor(Utilisateur utilisateur) {
+    public Token createFor(Utilisateur utilisateur, String notificationToken) {
         Token token = new Token(utilisateur);
+        token.setNotificationToken(notificationToken);
         tokenRepository.save(token);
         return token;
+    }
+
+    public Token createFor(Utilisateur utilisateur) {
+        return createFor(utilisateur, null);
     }
 
     public Token getToken(HttpServletRequest request) {

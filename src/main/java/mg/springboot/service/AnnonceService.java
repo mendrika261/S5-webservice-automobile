@@ -1,5 +1,6 @@
 package mg.springboot.service;
 
+import jakarta.transaction.Transactional;
 import mg.springboot.entity.*;
 import mg.springboot.exception.ValidationException;
 import mg.springboot.repository.AnnonceRepository;
@@ -11,6 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +32,9 @@ public class AnnonceService {
     private final CouleurService couleurService;
     private final MarqueService marqueService;
 
-    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService, HistoriqueEtatAnnonceService historiqueEtatAnnonceService, UtilisateurRepository utilisateurRepository, EtatVoitureService etatVoitureService, CouleurService couleurService, MarqueService marqueService) {
+    private final NotificationService notificationService;
+
+    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService, HistoriqueEtatAnnonceService historiqueEtatAnnonceService, UtilisateurRepository utilisateurRepository, EtatVoitureService etatVoitureService, CouleurService couleurService, MarqueService marqueService, NotificationService notificationService) {
         this.annonceRepository = annonceRepository;
         this.commissionService = commissionService;
         this.historiqueEtatAnnonceService = historiqueEtatAnnonceService;
@@ -34,6 +42,7 @@ public class AnnonceService {
         this.etatVoitureService = etatVoitureService;
         this.couleurService = couleurService;
         this.marqueService = marqueService;
+        this.notificationService = notificationService;
     }
 
     public List<Annonce> findAll() {
@@ -52,6 +61,7 @@ public class AnnonceService {
                 .toList();
     }
 
+    @Transactional
     public Annonce valider(Integer id, Utilisateur validateur) {
         Annonce annonce = findById(id);
         annonce.setEtat(Annonce.ETAT_VALIDE);
@@ -66,10 +76,21 @@ public class AnnonceService {
         historiqueEtatAnnonce1.setEtat(Annonce.ETAT_VALIDE);
         historiqueEtatAnnonce1.setUtilisateur_origine(validateur);
         historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
+
+        String imageUrl = annonce.getVoiture().getPhotos().stream().findFirst().isPresent() ?
+                NotificationService.FIREBASE_IMG_URL+ URLEncoder.encode(annonce.getVoiture().getPhotos().stream().findFirst().get().getLien(), StandardCharsets.UTF_8)+"?alt=media" : null;
+
+
+        notificationService.sendNotificationTo("Annonce approuvée",
+                "Votre annonce sur la voiture "+annonce.getVoiture().getSortieVoiture().getModele().getMarque().getNom()+" " +
+                        annonce.getVoiture().getSortieVoiture().getModele().getNom()+" a été validée", imageUrl,
+                annonce.getVoiture().getUtilisateur().getId());
+
         return save(annonce);
     }
 
-    public Annonce refuser(Integer id, Utilisateur validateur) {
+    @Transactional
+    public Annonce refuser(Integer id, Utilisateur validateur) throws URISyntaxException {
         Annonce annonce = findById(id);
         annonce.setEtat(Annonce.ETAT_REFUSE);
         annonce.setValidateur(validateur);
@@ -81,6 +102,15 @@ public class AnnonceService {
         historiqueEtatAnnonce1.setEtat(Annonce.ETAT_REFUSE);
         historiqueEtatAnnonce1.setUtilisateur_origine(validateur);
         historiqueEtatAnnonceService.save(historiqueEtatAnnonce1);
+
+        String imageUrl = annonce.getVoiture().getPhotos().stream().findFirst().isPresent() ?
+                NotificationService.FIREBASE_IMG_URL+ URLEncoder.encode(annonce.getVoiture().getPhotos().stream().findFirst().get().getLien(), StandardCharsets.UTF_8)+"?alt=media" : null;
+
+        notificationService.sendNotificationTo("Annonce refusée",
+                "Votre annonce sur la voiture "+annonce.getVoiture().getSortieVoiture().getModele().getMarque().getNom()+" " +
+                        annonce.getVoiture().getSortieVoiture().getModele().getNom()+" n'est pas conforme", imageUrl,
+                annonce.getVoiture().getUtilisateur().getId());
+
         return save(annonce);
     }
 
