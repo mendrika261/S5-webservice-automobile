@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public interface DiscussionRepository extends MongoRepository<Discussion, Integer> {
-    @Query("{'$or':[{'utilisateur1':?0}, {'utilisateur1':?0}]}")
+    @Query("{'$or':[{'utilisateur1':?0}, {'utilisateur2':?0}]}")
     List<Discussion> findDiscussions(String user);
 
-    @Query("{'$or':[{'$and':[{'utilisateur1':?0}, {'utilisateur2':?1}]}, {'$and':[{'utilisateur1':?0}, {'utilisateur2':?1}]}]}")
+    @Query("{'$or':[{'$and':[{'utilisateur1':?0}, {'utilisateur2':?1}]}, {'$and':[{'utilisateur2':?0}, {'utilisateur1':?1}]}]}")
     Discussion findDiscussionsByTwoUsers(String userId1, String userId2);
 }
