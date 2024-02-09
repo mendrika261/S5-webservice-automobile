@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Setter
 @Getter
-@RequestMapping("/admin")
 public class BoiteVitesseController {
     BoiteVitesseService boiteVitesseService;
 
@@ -21,29 +20,29 @@ public class BoiteVitesseController {
         this.boiteVitesseService = boiteVitesseService;
     }
 
-    @GetMapping("/boite_vitesses")
+    @GetMapping({"/admin/boite_vitesses", "/api/boite_vitesses"})
     public Response<?> getBoiteVitesse() {
         return Response.send(HttpStatus.OK, "success", boiteVitesseService.findAll());
     }
 
-    @GetMapping("/boite_vitesses/{id}")
+    @GetMapping("/admin/boite_vitesses/{id}")
     public Response<?> getBoiteVitesse(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", boiteVitesseService.findById(id));
     }
 
-    @PostMapping("/boite_vitesses")
+    @PostMapping("/admin/boite_vitesses")
     public Response<?> addBoiteVitesse(@Valid BoiteVitesse boiteVitesse) {
         return Response.send(HttpStatus.OK, "success", "La boite de vitesse a été ajouté",
                 boiteVitesseService.save(boiteVitesse));
     }
 
-    @PutMapping("/boite_vitesses/{id}")
+    @PutMapping("/admin/boite_vitesses/{id}")
     public Response<?> modifyBoiteVitesse(@PathVariable int id, @Valid BoiteVitesse boiteVitesse) {
         return Response.send(HttpStatus.OK, "success", "La boite de vitesse a été modifié",
                 boiteVitesseService.modify(id, boiteVitesse));
     }
 
-    @DeleteMapping("/boite_vitesses/{id}")
+    @DeleteMapping("/admin/boite_vitesses/{id}")
     public Response<?> deleteBoiteVitesse(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", "La boite de vitesse a été supprimé",
                 boiteVitesseService.delete(id));

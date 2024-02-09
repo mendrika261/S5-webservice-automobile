@@ -31,4 +31,10 @@ public interface AnnonceRepository extends JpaRepository<Annonce, Integer>, Pagi
     List<Annonce> findAllByEtatAndVoitureUtilisateurId(int etat, String idUtilisateur);
 
     List<Annonce> findAllByVoitureUtilisateurId(String idUtilisateur);
+
+    @Query("select a from Annonce a where a.etat = " + Annonce.ETAT_VALIDE + " and a.voiture.sortieVoiture.modele.nom like %?1% " +
+            "and a.voiture.sortieVoiture.modele.marque.id in ?2 and a.voiture.sortieVoiture.boiteVitesse.id in ?3 " +
+            "and a.voiture.sortieVoiture.energie.id in ?4 and a.voiture.etatVoiture.id in ?5 and a.voiture.sortieVoiture.pays.id in ?6")
+    List<Annonce> findFilterAnnonceValide(String modeleLike, Integer[] marques,
+            Integer[] boiteVitesses, Integer[] energie, Integer[] etatVoiture, Integer[] pays, PageRequest pageable);
 }

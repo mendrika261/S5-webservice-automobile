@@ -41,7 +41,14 @@ public class MessageController {
                 discussionService.get_discussions(utilisateur1));
     }
 
-
+    @GetMapping("/api/messages/{id}")
+    public Response<?> getDiscussions(HttpServletRequest request, @PathVariable String id) {
+        Token token = tokenService.getToken(request);
+        Utilisateur utilisateur1 = token.getUtilisateur();
+        Utilisateur utilisateur2 = utilisateurService.findById(id);
+        return Response.send(HttpStatus.OK, "success",
+                discussionService.getDiscussionEntre(utilisateur1, utilisateur2));
+    }
 
 
     @PostMapping("/api/messages")

@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import mg.springboot.entity.*;
 import mg.springboot.exception.AccessDeniedException;
+import mg.springboot.model.FilterObject;
 import mg.springboot.security.Response;
 import mg.springboot.security.Token;
 import mg.springboot.service.AnnonceService;
@@ -48,8 +49,19 @@ public class AnnonceController {
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "5") Integer size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "ASC") String order) {
-        return Response.send(HttpStatus.OK, "success", annonceService.findAllValides(page, size, sort, order));
+            @RequestParam(defaultValue = "ASC") String order,
+            @RequestBody(required = false) FilterObject filterObject) {
+        return Response.send(HttpStatus.OK, "success", annonceService.findAllValides(page, size, sort, order, filterObject));
+    }
+
+    @PostMapping("/annonces/filter")
+    public Response<?> findAllValideE(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "ASC") String order,
+            FilterObject filterObject) {
+        return Response.send(HttpStatus.OK, "success", annonceService.findAllValides(page, size, sort, order, filterObject));
     }
 
     @GetMapping("/api/annonces/{id}")

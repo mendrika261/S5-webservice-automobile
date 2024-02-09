@@ -19,7 +19,6 @@ import java.util.Optional;
 @RestController
 @Setter
 @Getter
-@RequestMapping("/admin")
 public class MarqueController {
     private final MarqueService marqueService;
     private final TokenService tokenService;
@@ -29,27 +28,27 @@ public class MarqueController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping("/marques/{id}")
+    @GetMapping("/admin/marques/{id}")
     public Response<?> getMarques(@PathVariable int id) {
         return Response.send(HttpStatus.OK, "success", marqueService.findById(id));
     }
 
 
-    @GetMapping("/marques")
+    @GetMapping({"/admin/marques", "/api/marques"})
     public Response<?> getMarques()
     {
         return Response.send(HttpStatus.OK,"success",marqueService.getAll());
     }
 
 
-    @PostMapping("/marques")
+    @PostMapping("/admin/marques")
     public Response<?> addMarque(@Valid Marque marque) {
         return Response.send(HttpStatus.OK, "success", "La marque  a été ajouté",
                 marqueService.save(marque));
     }
 
 
-    @PutMapping("/marques/{id}")
+    @PutMapping("/admin/marques/{id}")
     public Response<?> modifyMarque(@PathVariable Integer id, @Valid Marque marque) {
         return Response.send(HttpStatus.OK, "success", "La marque a été modifié",
                 marqueService.modify(id, marque));
@@ -57,7 +56,7 @@ public class MarqueController {
 
 
 
-    @DeleteMapping("/marques/{id}")
+    @DeleteMapping("/admin/marques/{id}")
     public Response<?> deleteMarque(@PathVariable Integer id) {
         return Response.send(HttpStatus.OK, "success", "La marque a été supprimé",
                 marqueService.delete(id));

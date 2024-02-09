@@ -56,7 +56,6 @@ public class NotificationService {
     }
 
     public void sendNotificationTo(String title, String body, String imageUrl, String utilisateurId) {
-        System.out.println(imageUrl);
         for (String token : getTokensNotification(utilisateurId)) {
             sendNotification(title, body, imageUrl, token);
         }

@@ -3,9 +3,8 @@ package mg.springboot.service;
 import jakarta.transaction.Transactional;
 import mg.springboot.entity.*;
 import mg.springboot.exception.ValidationException;
-import mg.springboot.repository.AnnonceRepository;
-import mg.springboot.repository.EtatVoitureRepository;
-import mg.springboot.repository.UtilisateurRepository;
+import mg.springboot.model.FilterObject;
+import mg.springboot.repository.*;
 import mg.springboot.repository.UtilisateurRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
@@ -33,8 +32,14 @@ public class AnnonceService {
     private final MarqueService marqueService;
 
     private final NotificationService notificationService;
+    private final BoiteVitesseRepository boiteVitesseRepository;
+    private final EnergieRepository energieRepository;
+    private final PaysRepository paysRepository;
 
-    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService, HistoriqueEtatAnnonceService historiqueEtatAnnonceService, UtilisateurRepository utilisateurRepository, EtatVoitureService etatVoitureService, CouleurService couleurService, MarqueService marqueService, NotificationService notificationService) {
+    public AnnonceService(AnnonceRepository annonceRepository, CommissionService commissionService, HistoriqueEtatAnnonceService historiqueEtatAnnonceService, UtilisateurRepository utilisateurRepository, EtatVoitureService etatVoitureService, CouleurService couleurService, MarqueService marqueService, NotificationService notificationService,
+                          BoiteVitesseRepository boiteVitesseRepository,
+                          EnergieRepository energieRepository,
+                          PaysRepository paysRepository) {
         this.annonceRepository = annonceRepository;
         this.commissionService = commissionService;
         this.historiqueEtatAnnonceService = historiqueEtatAnnonceService;
@@ -43,6 +48,9 @@ public class AnnonceService {
         this.couleurService = couleurService;
         this.marqueService = marqueService;
         this.notificationService = notificationService;
+        this.boiteVitesseRepository = boiteVitesseRepository;
+        this.energieRepository = energieRepository;
+        this.paysRepository = paysRepository;
     }
 
     public List<Annonce> findAll() {
@@ -204,12 +212,42 @@ public class AnnonceService {
         return annonce;
     }
 
-    public List<Annonce> findAllValides(Integer page, Integer size, String sort, String order) {
+
+    public List<Annonce> findAllValides(Integer page, Integer size, String sort, String order, FilterObject filterObject) {
+        if(filterObject.getMarques().length==0)
+        {
+            List<Marque> marques=marqueService.getAll();
+            filterObject.setMarques(marques.stream().map(Marque::getId).toArray(Integer[]::new));
+        }
+        if(filterObject.getBoiteVitesses().length==0)
+        {
+            List<BoiteVitesse> boiteVitesses=boiteVitesseRepository.findAll();
+            filterObject.setBoiteVitesses(boiteVitesses.stream().map(BoiteVitesse::getId).toArray(Integer[]::new));
+        }
+        if(filterObject.getEnergie().length==0)
+        {
+            List<Energie> energies=energieRepository.findAll();
+            filterObject.setEnergie(energies.stream().map(Energie::getId).toArray(Integer[]::new));
+        }
+        if(filterObject.getEtatVoiture().length==0)
+        {
+            List<EtatVoiture> etatVoitures=etatVoitureService.getAll();
+            filterObject.setEtatVoiture(etatVoitures.stream().map(EtatVoiture::getId).toArray(Integer[]::new));
+        }
+        if(filterObject.getPays().length==0)
+        {
+            List<Pays> pays=paysRepository.findAll();
+            filterObject.setPays(pays.stream().map(Pays::getId).toArray(Integer[]::new));
+        }
+
         Sort.Direction direction = Sort.Direction.ASC;
         if (order.equalsIgnoreCase("desc"))
             direction = Sort.Direction.DESC;
         PageRequest pageable = PageRequest.of(page, size, Sort.by(direction, sort));
-        return annonceRepository.findAllByEtat(Annonce.ETAT_VALIDE, pageable).stream()
+        return annonceRepository.findFilterAnnonceValide(filterObject.getModeleLike(), filterObject.getMarques(),
+                        filterObject.getBoiteVitesses(), filterObject.getEnergie(), filterObject.getEtatVoiture(),
+                        filterObject.getPays(), pageable)
+                .stream()
                 .peek(annonce -> annonce
                         .setCommission(commissionService
                                 .getCommission(annonce.getDate(), annonce.getPrix())))
